@@ -1,9 +1,11 @@
 from flask import Flask, request, jsonify, render_template
+from werkzeug.middleware.proxy_fix import ProxyFix
 import re
 
 app = Flask(__name__)
-pattern = re.compile(r'^[A-Z]{4}\d{7}$')
+app.wsgi_app = ProxyFix(app.wsgi_app, x_for=1)
 
+pattern = re.compile(r'^[A-Z]{4}\d{7}$')
 last_corrections = []
 
 def corregir_matricula(matricula):
@@ -33,6 +35,8 @@ def guardar():
     data = request.json
     corregida = data.get('corregida')
     hora_local = data.get('hora_local')
+
+    # Obtener IP real del cliente
     ip = request.headers.get('X-Forwarded-For', request.remote_addr).split(',')[0].strip()
 
     if not corregida or not hora_local:

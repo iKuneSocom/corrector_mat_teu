@@ -6,10 +6,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
   copyButton.disabled = true;
 
-  // Expresión regular para formato válido
   const validarFormato = (mat) => /^[A-Z]{4}\d{7}$/.test(mat);
 
-  // Validación automática al escribir
   containerNumberInput.addEventListener('input', () => {
     const inputValue = containerNumberInput.value;
 
@@ -34,28 +32,26 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // Al pulsar copy se guarda la matrícula validada
   copyButton.addEventListener('click', () => {
-  correctedNumberInput.select();
-  document.execCommand('copy');
+    correctedNumberInput.select();
+    document.execCommand('copy');
 
-  const horaLocal = new Date().toLocaleString();
+    const horaLocal = new Date().toLocaleString();
 
-  fetch('/guardar', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      corregida: correctedNumberInput.value,
-      hora_local: horaLocal
+    fetch('/guardar', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        corregida: correctedNumberInput.value,
+        hora_local: horaLocal
+      })
     })
-  })
-  .then(res => res.json())
-  .then(data => {
-    updateHistoryList(data.last_corrections, data.ip_cliente);
-  })
-  .catch(err => console.error('Error al guardar:', err));
-});
-
+    .then(res => res.json())
+    .then(data => {
+      updateHistoryList(data.last_corrections, data.ip_cliente);
+    })
+    .catch(err => console.error('Error al guardar:', err));
+  });
 
   function updateHistoryList(corrections, ipCliente) {
     historyList.innerHTML = '';

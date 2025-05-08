@@ -16,6 +16,7 @@
         height: 100%;
         font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         background-color: #0b1f3a;
+        background-image: url('{{ url_for('static', filename='fondo_corr_teu.png') }}');
         background-repeat: no-repeat;
         background-position: center top;
         background-size: cover;
@@ -124,7 +125,7 @@
   </head>
   <body>
     <div class="logo-wrapper">
-      <img src="{{ url_for('static', filename='fondo_corr_teu2.png') }}" alt="PMAP Logo" />
+      <img src="{{ url_for('static', filename='fondo_corr_teu.png') }}" alt="PMAP Logo" />
     </div>
     <div class="container">
       <h1>Container Number Validator</h1>
@@ -134,10 +135,15 @@
       <input type="text" id="correctedNumber" name="correctedNumber" readonly />
       <button id="copyButton" disabled>Copy</button>
       <div class="history-section">
-        <h3>Last 18 Corrected Numbers</h3>
+        <h3>Last 9 Corrected Numbers (with IP)</h3>
         <ul id="historyList"></ul>
       </div>
     </div>
     <script src="{{ url_for('static', filename='script.js') }}"></script>
-  </body>
+  <footer style="margin-top: 40px; text-align: center; font-size: 0.9rem; color: #ccc;">
+  © 2025 Óscar Navarro. Todos los derechos reservados.<br>
+  Contacto: <a href="mailto:kune.socom@gmail.com" style="color: #00aaff;">email</a> ·
+  <a href="https://www.linkedin.com/in/oscar-navarro-vegas/" target="_blank" style="color: #00aaff;">LinkedIn</a>
+</footer>
+</body>
 </html>

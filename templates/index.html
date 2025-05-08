@@ -149,6 +149,21 @@
       }
     </style>
   </head>
+  <script>
+    function copiarEmail() {
+      const email = "kune.socom@gmail.com";
+      navigator.clipboard.writeText(email).then(() => {
+        const mensaje = document.getElementById("mensajeCopiado");
+        mensaje.style.display = "inline";
+        setTimeout(() => {
+          mensaje.style.display = "none";
+        }, 2000);
+      }).catch(err => {
+        console.error("Error al copiar el correo:", err);
+      });
+    }
+  </script>
+
   <body>
     <div class="logo-wrapper">
       <img src="{{ url_for('static', filename='fondo_corr_teu2.png') }}" alt="PMAP Logo" />

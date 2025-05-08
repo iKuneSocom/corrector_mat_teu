@@ -4,11 +4,9 @@ import re
 app = Flask(__name__)
 pattern = re.compile(r'^[A-Z]{4}\d{7}$')
 
-# Almacén en memoria de las últimas 9 correcciones
 last_corrections = []
 
 def corregir_matricula(matricula):
-    """Limpia y formatea una matrícula tipo XXXX0000000"""
     limpia = re.sub(r'[^A-Za-z0-9]', '', matricula).upper()
     letras = ''.join(re.findall(r'[A-Z]', limpia))[:4]
     numeros = ''.join(re.findall(r'\d', limpia))[:7]
@@ -22,7 +20,6 @@ def index():
 
 @app.route('/validar', methods=['POST'])
 def validar():
-    """Devuelve la matrícula corregida y su validez"""
     data = request.json
     matricula = data.get('matricula', '')
     corregida, es_valida = corregir_matricula(matricula)
@@ -33,7 +30,6 @@ def validar():
 
 @app.route('/guardar', methods=['POST'])
 def guardar():
-    """Guarda la matrícula validada solo cuando se copia"""
     data = request.json
     corregida = data.get('corregida')
     hora_local = data.get('hora_local')

@@ -6,17 +6,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
   copyButton.disabled = true;
 
-  const validarFormato = (matricula) => /^[A-Z]{4}\d{7}$/.test(matricula);
+  // Expresión regular para formato válido
+  const validarFormato = (mat) => /^[A-Z]{4}\d{7}$/.test(mat);
 
+  // Validación automática al escribir
   containerNumberInput.addEventListener('input', () => {
-    const containerNumber = containerNumberInput.value;
+    const inputValue = containerNumberInput.value;
 
     fetch('/validar', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ matricula: containerNumber })
+      body: JSON.stringify({ matricula: inputValue })
     })
-    .then(response => response.json())
+    .then(res => res.json())
     .then(data => {
       correctedNumberInput.value = data.corregida;
 
@@ -29,29 +31,40 @@ document.addEventListener('DOMContentLoaded', () => {
         correctedNumberInput.classList.add('invalid');
         copyButton.disabled = true;
       }
-
-      updateHistoryList(data.last_corrections, data.ip_cliente);
-    })
-    .catch(error => {
-      console.error('Error:', error);
     });
   });
 
+  // Al pulsar copy se guarda la matrícula validada
   copyButton.addEventListener('click', () => {
-    correctedNumberInput.select();
-    document.execCommand('copy');
-  });
+  correctedNumberInput.select();
+  document.execCommand('copy');
 
-  function updateHistoryList(corrections, clientIP) {
+  const horaLocal = new Date().toLocaleString();
+
+  fetch('/guardar', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      corregida: correctedNumberInput.value,
+      hora_local: horaLocal
+    })
+  })
+  .then(res => res.json())
+  .then(data => {
+    updateHistoryList(data.last_corrections, data.ip_cliente);
+  })
+  .catch(err => console.error('Error al guardar:', err));
+});
+
+
+  function updateHistoryList(corrections, ipCliente) {
     historyList.innerHTML = '';
-    corrections.forEach(correction => {
-      const listItem = document.createElement('li');
-      const ipClass = correction.ip === clientIP ? 'ip-client' : '';
-      listItem.innerHTML = `
-        <span>${correction.corregida}</span>
-        <span class="${ipClass}">${correction.ip === clientIP ? correction.ip + ' (tú)' : correction.ip}</span>
-      `;
-      historyList.appendChild(listItem);
+    corrections.forEach(entry => {
+      const isUser = entry.ip === ipCliente;
+      const ipHtml = isUser ? `<span class="ip-client">${entry.ip} (tú)</span>` : `<span>${entry.ip}</span>`;
+      const li = document.createElement('li');
+      li.innerHTML = `<span>${entry.corregida}</span> ${ipHtml} <span style="margin-left: 1rem; font-size: 0.85rem;">🕓 ${entry.hora_local}</span>`;
+      historyList.appendChild(li);
     });
   }
 });

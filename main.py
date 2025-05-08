@@ -33,7 +33,7 @@ def guardar():
     data = request.json
     corregida = data.get('corregida')
     hora_local = data.get('hora_local')
-    ip = request.remote_addr
+    ip = request.headers.get('X-Forwarded-For', request.remote_addr).split(',')[0].strip()
 
     if not corregida or not hora_local:
         return jsonify({'error': 'Datos incompletos'}), 400

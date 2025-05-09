@@ -149,6 +149,19 @@
       }
     </style>
   </head>
+  <script>
+  // Contador de visitas local (demo con localStorage)
+  document.addEventListener('DOMContentLoaded', () => {
+    const counterKey = 'visit-counter';
+    let visits = localStorage.getItem(counterKey);
+    visits = visits ? parseInt(visits) + 1 : 1;
+    localStorage.setItem(counterKey, visits);
+    const counterElement = document.getElementById("visitCounter");
+    if (counterElement) {
+      counterElement.textContent = `👁️ Visitas locales: ${visits}`;
+    }
+  });
+  </script>
   <body>
     <div class="logo-wrapper">
       <img src="{{ url_for('static', filename='fondo_corr_teu2.png') }}" alt="PMAP Logo" />
@@ -168,6 +181,9 @@
       </div>
     </div>
     <footer>
+      <div id="visitCounter" style="margin-bottom: 10px; font-size: 0.85rem; color: #88ccff; transform: translateZ(10px); text-shadow: 1px 1px 2px #000;">
+        👁️ Cargando contador de visitas...
+      </div>
       © 2025 Óscar Navarro. Todos los derechos reservados.<br>
       <a href="#" onclick="copiarEmail(event)">
   <img src="https://img.icons8.com/ios-glyphs/20/00aaff/new-post.png" alt="Email" style="vertical-align: middle; margin-right: 4px;"/>

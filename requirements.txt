@@ -1,4 +1,1 @@
-# App
-flask
-gunicorn
-user-agents
+flask>=2.0.0

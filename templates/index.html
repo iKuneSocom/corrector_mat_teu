@@ -286,7 +286,7 @@
         document.addEventListener('DOMContentLoaded', loadStats);
     </script>
     <script>
-        document.getElementById('copyButton')?.addEventListener('click', () => {
+        document.getElementById('copyButton') ? .addEventListener('click', () => {
             fetch('/guardar-correccion', {
                 method: 'POST'
             }).then(res => res.json()).then(data => {

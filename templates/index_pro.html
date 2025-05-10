@@ -1,157 +1,301 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
+
+<head>
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Container Validator PRO</title>
     <style>
-      * { box-sizing: border-box; }
-      html, body {
-        margin: 0;
-        padding: 0;
-        width: 100%;
-        height: 100%;
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        background-color: #0b1f3a;
-
-        background-repeat: no-repeat;
-        background-position: center top;
-        background-size: cover;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        perspective: 1000px;
-      }
-      .logo-wrapper {
-        width: 100%;
-        max-width: 400px;
-        padding-top: 20px;
-        transform: translateZ(30px);
-      }
-      .logo-wrapper img {
-  width: 100%;
-  height: auto;
-  display: block;
-  margin: 0 auto;
-  border-radius: 16px;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
-  transform: scale(1.03) rotateX(2deg) rotateY(1deg);
-  transition: transform 0.4s ease;
-}
-.logo-wrapper img:hover {
-  transform: scale(1.05) rotateX(0deg) rotateY(0deg);
-}
-      $1transform: rotateX(5deg) rotateY(3deg) scale(1.01);
-        transition: transform 0.5s ease;
-      }
-      .container:hover {
-        transform: rotateX(0deg) rotateY(0deg) scale(1);
-      }
-      h1 {
-        text-align: center;
-        margin-bottom: 20px;
-        color: #00d4ff;
-        font-size: 1.8rem;
-      }
-      .stats {
-        text-align: center;
-        margin-bottom: 15px;
-        font-size: 0.9rem;
-        color: #00ffaa;
-      }
-      label {
-        margin-top: 10px;
-        font-weight: 500;
-        color: #e0e8f0;
-      }
-      input[type="text"] {
-        width: 100%;
-        padding: 10px;
-        margin: 5px 0 15px 0;
-        border: 1px solid #005ea3;
-        border-radius: 4px;
-        font-size: 1rem;
-        background-color: #eaf4ff;
-        color: #002d52;
-        transition: border 0.3s, box-shadow 0.3s;
-      }
-      input[readonly] {
-        background-color: #d0e7f9;
-      }
-      input.valid {
-        border: 2px solid #00ff88;
-        box-shadow: 0 0 5px #00ff88;
-      }
-      input.invalid {
-        border: 2px solid #ff4444;
-        box-shadow: 0 0 5px #ff4444;
-      }
-      .donate {
-        text-align: center;
-        margin-top: 15px;
-      }
-      .donate a {
-        background-color: #ffaa00;
-        color: #000;
-        padding: 8px 16px;
-        border-radius: 8px;
-        text-decoration: none;
-        font-weight: bold;
-        transition: background 0.3s;
-      }
-      .donate a:hover {
-        background-color: #ffcc66;
-      }
-      footer {
-        background-color: #09172d;
-        width: 100%;
-        text-align: center;
-        padding: 20px;
-        font-size: 0.9rem;
-        color: #ccc;
-        margin-top: 40px;
-        box-shadow: 0 -5px 20px rgba(0, 0, 0, 0.5);
-      }
+        * {
+            box-sizing: border-box;
+        }
+        
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #0b1f3a;
+            background-repeat: no-repeat;
+            background-position: center top;
+            background-size: cover;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            perspective: 1000px;
+        }
+        
+        .logo-wrapper {
+            width: 100%;
+            max-width: 400px;
+            padding-top: 20px;
+            transform: translateZ(30px);
+        }
+        
+        .logo-wrapper img {
+            width: 100%;
+            height: auto;
+            display: block;
+            margin: 0 auto;
+            border-radius: 16px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+            transform: scale(1.03) rotateX(2deg) rotateY(1deg);
+            transition: transform 0.4s ease;
+        }
+        
+        .logo-wrapper img:hover {
+            transform: scale(1.05) rotateX(0deg) rotateY(0deg);
+        }
+        
+        .container {
+            transform: none;
+            transition: none;
+            background-color: rgba(11, 31, 58, 0.95);
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+            width: 90%;
+            max-width: 949px;
+            margin-top: 20px;
+            color: #ffffff;
+        }
+        
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #00d4ff;
+            font-size: 1.8rem;
+        }
+        
+        .stats {
+            text-align: center;
+            margin-bottom: 15px;
+            font-size: 0.9rem;
+            color: #00ffaa;
+        }
+        
+        label {
+            margin-top: 10px;
+            font-weight: 500;
+            color: #e0e8f0;
+        }
+        
+        input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            margin: 5px 0 15px 0;
+            border: 1px solid #005ea3;
+            border-radius: 4px;
+            font-size: 1rem;
+            background-color: #eaf4ff;
+            color: #002d52;
+            transition: border 0.3s, box-shadow 0.3s;
+        }
+        
+        input[readonly] {
+            background-color: #d0e7f9;
+        }
+        
+        input.valid {
+            border: 2px solid #00ff88;
+            box-shadow: 0 0 5px #00ff88;
+        }
+        
+        input.invalid {
+            border: 2px solid #ff4444;
+            box-shadow: 0 0 5px #ff4444;
+        }
+        
+        button#copyButton {
+            width: 100%;
+            padding: 12px;
+            font-size: 1rem;
+            cursor: pointer;
+            border: none;
+            border-radius: 8px;
+            background: linear-gradient(45deg, #00aaff, #0077cc);
+            color: #fff;
+            font-weight: bold;
+            transition: background 0.3s, transform 0.2s;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+        }
+        
+        button#copyButton:hover:enabled {
+            background: linear-gradient(45deg, #0077cc, #005ea3);
+            transform: translateY(-2px);
+        }
+        
+        button#copyButton:disabled {
+            background: #7aa7c2;
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+        
+        .donate {
+            text-align: center;
+            margin-top: 15px;
+        }
+        
+        .donate a {
+            background-color: #ffaa00;
+            color: #000;
+            padding: 8px 16px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: background 0.3s;
+        }
+        
+        .donate a:hover {
+            background-color: #ffcc66;
+        }
+        
+        footer {
+            background-color: #09172d;
+            color: #ccc;
+            padding: 20px;
+            text-align: center;
+            font-size: 0.9rem;
+            margin-top: 40px;
+            box-shadow: 0 -5px 20px rgba(0, 0, 0, 0.5);
+        }
+        
+        .footer-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+        }
+        
+        .footer-section {
+            margin-bottom: 10px;
+        }
+        
+        .stats p {
+            margin: 5px 0;
+            font-size: 0.85rem;
+            color: #88ccff;
+        }
+        
+        .social-links {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .icon {
+            width: 2.5rem;
+            height: 2.5rem;
+            border-radius: 50%;
+            background-color: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s ease, background-color 0.3s ease;
+        }
+        
+        .icon i {
+            color: #2dd4bf;
+            font-size: 1.2rem;
+        }
+        
+        .icon:hover {
+            transform: scale(1.1);
+            background-color: #2dd4bf;
+        }
+        
+        .icon:hover i {
+            color: #fff;
+        }
+        
+        .donate-link {
+            color: #ffaa00;
+            text-decoration: none;
+            font-weight: bold;
+            transition: color 0.3s ease;
+        }
+        
+        .donate-link:hover {
+            color: #ffcc66;
+        }
     </style>
-  </head>
-  <body>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+</head>
+
+<body>
     <div class="logo-wrapper">
-      <img src="{{ url_for('static', filename='fondo_corr_teu2.png') }}" alt="PMAP Logo" />
+        <img src="{{ url_for('static', filename='fondo_corr_teu2.png') }}" alt="Logo with a modern and sleek design displaying the text PMAP Corrector Matriculas TEU in bold, set against a gradient background. The design conveys a professional and innovative tone."
+        />
     </div>
     <div class="container">
-      <h1>Container Validator PRO</h1>
-      <div class="stats">
-        👥 Usuarios totales: <span id="userCount">-</span> · 📦 Matrículas corregidas: <span id="correctionsCount">-</span>
-      </div>
-      <label for="containerNumber">Enter Container Number:</label>
-      <input type="text" id="containerNumber" name="containerNumber" />
-      <label for="correctedNumber">Corrected Number:</label>
-      <input type="text" id="correctedNumber" name="correctedNumber" readonly />
-      <button id="copyButton" disabled>Copy</button>
+        <h1>Container Validator PRO</h1>
+        <label for="containerNumber">Enter Container Number:</label>
+        <input type="text" id="containerNumber" name="containerNumber" />
+        <label for="correctedNumber">Corrected Number:</label>
+        <input type="text" id="correctedNumber" name="correctedNumber" readonly />
+        <button id="copyButton" disabled>Copy</button>
 
     </div>
-    $1
-      <div class="donate">
-        <a href="https://www.buymeacoffee.com/ikunedev" target="_blank" style="background-color: transparent; color: #00aaff; text-decoration: none; font-weight: bold;">
-          Si te gusta apóyame con un café
-        </a>
-      </div>
-</footer>
+    <footer>
+        <div class="footer-container">
+            <!-- Sección de estadísticas -->
+            <div class="footer-section stats">
+                <p>👤 Usuarios únicos: <span id="userCount">Cargando...</span></p>
+                <p>✏️ Correcciones realizadas: <span id="correctionsCount">Cargando...</span></p>
+                <p>👁️ Visitas únicas: <span id="visitCounter">Cargando...</span></p>
+            </div>
+
+            <!-- Sección de enlaces sociales -->
+            <div class="footer-section social-links">
+                <a href="https://www.instagram.com/ikune/" target="_blank" class="icon">
+                    <i class="fa-brands fa-instagram"></i>
+                </a>
+                <a href="https://www.linkedin.com/in/oscar-navarro-vegas/" target="_blank" class="icon">
+                    <i class="fa-brands fa-linkedin-in"></i>
+                </a>
+                <a href="https://twitter.com/iKuneSocom" target="_blank" class="icon">
+                    <i class="fa-brands fa-x-twitter"></i>
+                </a>
+                <a href="https://github.com/iKuneSocom" target="_blank" class="icon">
+                    <i class="fa-brands fa-github"></i>
+                </a>
+            </div>
+
+            <!-- Sección de derechos de autor -->
+            <div class="footer-section copyright">
+                <p>© 2025 Óscar Navarro. Todos los derechos reservados.</p>
+                <a href="https://www.buymeacoffee.com/ikunedev" target="_blank" class="donate-link">Apóyame con un café</a>
+            </div>
+        </div>
+    </footer>
     <script>
-      async function loadStats() {
-        try {
-          const res = await fetch('/api/stats');
-          const data = await res.json();
-          document.getElementById('userCount').textContent = data.users;
-          document.getElementById('correctionsCount').textContent = data.corrections;
-          document.getElementById('visitCounter').textContent = `👁️ Visitas únicas: ${data.visits}`;
-        } catch (e) {
-          console.error("No se pudo cargar la API de estadísticas");
+        async function loadStats() {
+            try {
+                const res = await fetch('/api/stats');
+                const data = await res.json();
+                document.getElementById('userCount').textContent = data.users;
+                document.getElementById('correctionsCount').textContent = data.corrections;
+                document.getElementById('visitCounter').textContent = `👁️ Visitas únicas: ${data.visits}`;
+            } catch (e) {
+                console.error("No se pudo cargar la API de estadísticas");
+            }
         }
-      }
-      document.addEventListener('DOMContentLoaded', loadStats);
+        document.addEventListener('DOMContentLoaded', loadStats);
+    </script>
+    <script>
+        document.getElementById('copyButton') ? .addEventListener('click', () => {
+            fetch('/guardar-correccion', {
+                method: 'POST'
+            }).then(res => res.json()).then(data => {
+                console.log("✔️ Corrección registrada", data);
+                loadStats();
+            }).catch(err => console.error('Error al guardar la corrección:', err));
+        });
     </script>
     <script src="{{ url_for('static', filename='script.js') }}"></script>
-  </body>
+</body>
+
 </html>

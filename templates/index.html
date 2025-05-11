@@ -309,6 +309,11 @@
             margin-left: auto;
         }
 
+        .hist-ip,
+        .hist-hora {
+            font-size: 0.8em;
+        }
+
         /* Centrado y color igual que h1 para el título del historial */
         #historyTitle {
             text-align: center;
@@ -437,7 +442,12 @@
                 list.innerHTML = '';
                 data.forEach(item => {
                     const li = document.createElement('li');
-                    li.innerHTML = `<strong>${item.matricula}</strong> <span style="color:#7ecfff;font-size:0.9em;">${item.fecha}</span> <span style="color:#ffb300;font-size:0.9em;">IP: ${item.ip}</span>`;
+                    li.className = 'hist-item';
+                    li.innerHTML = `
+                        <span class="hist-mat">${item.matricula}</span>
+                        <span class="hist-hora">${item.fecha}</span>
+                        <span class="hist-ip">IP: ${item.ip}</span>
+                    `;
                     list.appendChild(li);
                 });
             } catch (e) {

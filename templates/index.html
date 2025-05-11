@@ -287,7 +287,13 @@
     </div>
     <div class="main-container">
         <h1>Container Validator PRO</h1>
-        <!-- ...formulario... -->
+        <label for="containerNumber">Introduce la matrícula del contenedor:</label>
+        <input type="text" id="containerNumber" name="containerNumber" autocomplete="off" />
+
+        <label for="correctedNumber">Matrícula corregida:</label>
+        <input type="text" id="correctedNumber" name="correctedNumber" readonly />
+
+        <button id="copyButton" disabled>Copiar</button>
     </div>
     <div class="main-container" id="historyContainer">
         <h2>Últimas correcciones</h2>

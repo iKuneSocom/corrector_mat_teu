@@ -403,7 +403,7 @@
                 const data = await res.json();
                 document.getElementById('userCount').textContent = data.users;
                 document.getElementById('correctionsCount').textContent = data.corrections;
-                document.getElementById('visitCounter').textContent = `Visitas: ${data.visits}`;
+                document.getElementById('visitCounter').textContent = data.visits;
             } catch (e) {
                 console.error("No se pudo cargar la API de estadísticas");
             }

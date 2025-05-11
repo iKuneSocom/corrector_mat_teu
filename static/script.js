@@ -3,6 +3,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const correctedNumberInput = document.getElementById('correctedNumber');
   const copyButton = document.getElementById('copyButton');
   const historyList = document.getElementById('historyList');
+  const visitCounter = document.getElementById('visitCounter');
 
   copyButton.disabled = true;
 
@@ -29,6 +30,8 @@ document.addEventListener('DOMContentLoaded', () => {
         correctedNumberInput.classList.add('invalid');
         copyButton.disabled = true;
       }
+
+      visitCounter.textContent = data.visits;
     });
   });
 

@@ -237,7 +237,10 @@
         <label for="correctedNumber">Corrected Number:</label>
         <input type="text" id="correctedNumber" name="correctedNumber" readonly />
         <button id="copyButton" disabled>Copy</button>
-
+    </div>
+    <div class="container" id="historyContainer">
+        <h2>Últimas correcciones</h2>
+        <ul id="historyList"></ul>
     </div>
     <footer>
         <div class="footer-container">
@@ -272,6 +275,7 @@
         </div>
     </footer>
     <script>
+        // Estadísticas del footer
         async function loadStats() {
             try {
                 const res = await fetch('/api/stats');
@@ -286,13 +290,18 @@
         document.addEventListener('DOMContentLoaded', loadStats);
     </script>
     <script>
-        document.getElementById('copyButton') ? .addEventListener('click', () => {
-            fetch('/guardar-correccion', {
-                method: 'POST'
-            }).then(res => res.json()).then(data => {
-                console.log("✔️ Corrección registrada", data);
-                loadStats();
-            }).catch(err => console.error('Error al guardar la corrección:', err));
+        // Ajustar ancho del formulario según el logo
+        document.addEventListener('DOMContentLoaded', () => {
+            const logo = document.querySelector('.logo-wrapper img');
+            const formContainer = document.querySelector('.container');
+            if (logo && formContainer) {
+                function ajustarAnchoFormulario() {
+                    const logoWidth = logo.offsetWidth;
+                    formContainer.style.maxWidth = (logoWidth * 1.618) + 'px';
+                }
+                ajustarAnchoFormulario();
+                window.addEventListener('resize', ajustarAnchoFormulario);
+            }
         });
     </script>
     <script src="{{ url_for('static', filename='script.js') }}"></script>

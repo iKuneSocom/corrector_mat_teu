@@ -1,11 +1,11 @@
 services:
   - type: web
-    name: container-validator
-    runtime: python
+    name: corrector-mat-teu
+    env: python
     buildCommand: pip install -r requirements.txt
     startCommand: gunicorn main:app
     envVars:
       - key: FLASK_ENV
         value: production
     plan: free
-    autoDeploy: true
+    autodeploy: true

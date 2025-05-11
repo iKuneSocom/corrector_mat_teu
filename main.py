@@ -76,6 +76,15 @@ def api_stats():
         'corrections': correcciones
     })
 
+@app.route('/api/historial')
+def api_historial():
+    db = get_db()
+    correcciones = db.execute(
+        'SELECT matricula, ip, fecha FROM correcciones ORDER BY fecha DESC LIMIT 9'
+    ).fetchall()
+    db.close()
+    return jsonify([dict(c) for c in correcciones])
+
 @app.before_request
 def contar_visita():
     if request.endpoint not in ('static',):

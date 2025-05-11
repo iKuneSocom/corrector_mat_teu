@@ -313,8 +313,8 @@
         #historyTitle {
             text-align: center;
             color: #00d4ff;      /* Igual que h1 */
-            font-size: 1.8rem;   /* Igual que h1 */
-            margin-bottom: 20px;
+            font-size: 1.4rem;   /* Igual que h1 */
+            margin-bottom: 18px;
             margin-top: 0;
             font-family: inherit;
             font-weight: bold;
@@ -426,6 +426,25 @@
                 window.addEventListener('resize', ajustarAnchoFormulario);
             }
         });
+    </script>
+    <script>
+        // Cargar historial de correcciones
+        async function loadHistory() {
+            try {
+                const res = await fetch('/api/historial');
+                const data = await res.json();
+                const list = document.getElementById('historyList');
+                list.innerHTML = '';
+                data.forEach(item => {
+                    const li = document.createElement('li');
+                    li.innerHTML = `<strong>${item.matricula}</strong> <span style="color:#7ecfff;font-size:0.9em;">${item.fecha}</span> <span style="color:#ffb300;font-size:0.9em;">IP: ${item.ip}</span>`;
+                    list.appendChild(li);
+                });
+            } catch (e) {
+                // Puedes mostrar un mensaje de error si lo deseas
+            }
+        }
+        document.addEventListener('DOMContentLoaded', loadHistory);
     </script>
     <script src="{{ url_for('static', filename='script.js') }}"></script>
 </body>

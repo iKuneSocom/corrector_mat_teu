@@ -5,7 +5,22 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Container Validator PRO</title>
+    <title>Corrector de Matrículas de Contenedores TEU Gratuito</title>
+    <meta name="description" content="Corrige y valida matrículas de contenedores TEU al instante. Herramienta gratuita para profesionales de logística, transporte y aduanas. Fácil, rápida y precisa.">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+    <!-- SEO y Social -->
+    <meta property="og:title" content="Corrector de Matrículas de Contenedores TEU" />
+    <meta property="og:description" content="Herramienta gratuita para validar y corregir matrículas de contenedores. Ideal para logística y transporte." />
+    <meta property="og:image" content="https://www.pmap.app/static/fondo_corr_teu2.png" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://www.pmap.app/" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Corrector de Matrículas de Contenedores TEU" />
+    <meta name="twitter:description" content="Herramienta gratuita para logística y transporte." />
+    <meta name="twitter:image" content="https://www.pmap.app/static/fondo_corr_teu2.png" />
+    <link rel="canonical" href="https://www.pmap.app/" />
+    <link rel="sitemap" type="application/xml" title="Sitemap" href="https://www.pmap.app/sitemap.xml" />
     <style>
         * {
             box-sizing: border-box;
@@ -17,7 +32,7 @@
             padding: 0;
             width: 100%;
             height: 100%;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Inter', 'Montserrat', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background-color: #0b1f3a;
             background-repeat: no-repeat;
             background-position: center top;
@@ -221,14 +236,54 @@
         .donate-link:hover {
             color: #ffcc66;
         }
+
+        #historyList {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .hist-item {
+            background: rgba(0, 212, 255, 0.08);
+            border-radius: 8px;
+            margin-bottom: 8px;
+            padding: 10px 14px;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 12px;
+            font-size: 1rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+        }
+        .hist-mat {
+            color: #00ffaa;
+            font-weight: bold;
+            letter-spacing: 1px;
+        }
+        .hist-ip {
+            color: #ffb300;
+            font-family: 'Consolas', 'Menlo', monospace;
+            font-size: 0.95em;
+            background: #222c;
+            padding: 2px 8px;
+            border-radius: 6px;
+        }
+        .hist-ip.tu {
+            background: #00ffaa;
+            color: #0b1f3a;
+            font-weight: bold;
+        }
+        .hist-hora {
+            color: #7ecfff;
+            font-size: 0.95em;
+            font-family: 'Montserrat', 'Inter', sans-serif;
+            margin-left: auto;
+        }
     </style>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
 </head>
 
 <body>
     <div class="logo-wrapper">
-        <img src="{{ url_for('static', filename='fondo_corr_teu2.png') }}" alt="Logo with a modern and sleek design displaying the text PMAP Corrector Matriculas TEU in bold, set against a gradient background. The design conveys a professional and innovative tone."
-        />
+        <img src="{{ url_for('static', filename='fondo_corr_teu2.png') }}" alt="Logo con diseño moderno y profesional de PMAP Corrector Matrículas TEU" />
     </div>
     <div class="container">
         <h1>Container Validator PRO</h1>
@@ -246,9 +301,9 @@
         <div class="footer-container">
             <!-- Sección de estadísticas -->
             <div class="footer-section stats">
-                <p>👤 Usuarios únicos: <span id="userCount">Cargando...</span></p>
-                <p>✏️ Correcciones realizadas: <span id="correctionsCount">Cargando...</span></p>
-                <p>👁️ Visitas únicas: <span id="visitCounter">Cargando...</span></p>
+                <p>Usuarios únicos: <span id="userCount">Cargando...</span></p>
+                <p>Correcciones realizadas: <span id="correctionsCount">Cargando...</span></p>
+                <p>Visitas: <span id="visitCounter">Cargando...</span></p>
             </div>
 
             <!-- Sección de enlaces sociales -->
@@ -282,7 +337,7 @@
                 const data = await res.json();
                 document.getElementById('userCount').textContent = data.users;
                 document.getElementById('correctionsCount').textContent = data.corrections;
-                document.getElementById('visitCounter').textContent = `👁️ Visitas únicas: ${data.visits}`;
+                document.getElementById('visitCounter').textContent = `Visitas: ${data.visits}`;
             } catch (e) {
                 console.error("No se pudo cargar la API de estadísticas");
             }

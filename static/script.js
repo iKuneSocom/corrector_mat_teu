@@ -53,13 +53,16 @@ document.addEventListener('DOMContentLoaded', () => {
     .catch(err => console.error('Error al guardar:', err));
   });
 
-  function updateHistoryList(corrections, ipCliente) {
+  function updateHistoryList(last_corrections, ip_cliente) {
     historyList.innerHTML = '';
-    corrections.forEach(entry => {
-      const isUser = entry.ip === ipCliente;
-      const ipHtml = isUser ? `<span class="ip-client">${entry.ip} (tú)</span>` : `<span>${entry.ip}</span>`;
+    last_corrections.forEach(item => {
       const li = document.createElement('li');
-      li.innerHTML = `<span>${entry.corregida}</span> ${ipHtml} <span style="margin-left: 1rem; font-size: 0.85rem;">🕓 ${entry.hora_local}</span>`;
+      li.className = 'hist-item';
+      li.innerHTML = `
+        <span class="hist-mat">${item.corregida}</span>
+        <span class="hist-ip${item.ip === ip_cliente ? ' tu' : ''}">${item.ip}${item.ip === ip_cliente ? ' (tú)' : ''}</span>
+        <span class="hist-hora">${item.hora_local}</span>
+      `;
       historyList.appendChild(li);
     });
   }

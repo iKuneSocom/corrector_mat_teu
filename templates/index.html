@@ -285,15 +285,11 @@
     <div class="logo-wrapper">
         <img src="{{ url_for('static', filename='fondo_corr_teu2.png') }}" alt="Logo con diseño moderno y profesional de PMAP Corrector Matrículas TEU" />
     </div>
-    <div class="container">
+    <div class="main-container">
         <h1>Container Validator PRO</h1>
-        <label for="containerNumber">Enter Container Number:</label>
-        <input type="text" id="containerNumber" name="containerNumber" />
-        <label for="correctedNumber">Corrected Number:</label>
-        <input type="text" id="correctedNumber" name="correctedNumber" readonly />
-        <button id="copyButton" disabled>Copy</button>
+        <!-- ...formulario... -->
     </div>
-    <div class="container" id="historyContainer">
+    <div class="main-container" id="historyContainer">
         <h2>Últimas correcciones</h2>
         <ul id="historyList"></ul>
     </div>
@@ -348,11 +344,13 @@
         // Ajustar ancho del formulario según el logo
         document.addEventListener('DOMContentLoaded', () => {
             const logo = document.querySelector('.logo-wrapper img');
-            const formContainer = document.querySelector('.container');
-            if (logo && formContainer) {
+            const containers = document.querySelectorAll('.main-container');
+            if (logo && containers.length) {
                 function ajustarAnchoFormulario() {
                     const logoWidth = logo.offsetWidth;
-                    formContainer.style.maxWidth = (logoWidth * 1.618) + 'px';
+                    containers.forEach(container => {
+                        container.style.maxWidth = (logoWidth * 1.618) + 'px';
+                    });
                 }
                 ajustarAnchoFormulario();
                 window.addEventListener('resize', ajustarAnchoFormulario);

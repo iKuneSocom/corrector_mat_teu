@@ -67,9 +67,7 @@
             transform: scale(1.05) rotateX(0deg) rotateY(0deg);
         }
         
-        .container {
-            transform: none;
-            transition: none;
+        .main-container {
             background-color: rgba(11, 31, 58, 0.95);
             padding: 20px;
             border-radius: 12px;
@@ -85,13 +83,6 @@
             margin-bottom: 20px;
             color: #00d4ff;
             font-size: 1.8rem;
-        }
-        
-        .stats {
-            text-align: center;
-            margin-bottom: 15px;
-            font-size: 0.9rem;
-            color: #00ffaa;
         }
         
         label {
@@ -138,7 +129,7 @@
             font-weight: bold;
             transition: background 0.3s, transform 0.2s;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-            margin-bottom: 24px; /* o el valor que prefieras */
+            margin-bottom: 24px;
         }
         
         button#copyButton:hover:enabled {
@@ -200,7 +191,38 @@
         
         .social-links {
             display: flex;
-            gap: 10px;
+            gap: 18px;
+            justify-content: center;
+            align-items: flex-end;
+        }
+        
+        .social-btn {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-decoration: none;
+            width: 3.2rem;
+            background: none;
+            box-shadow: none;
+        }
+        
+        .social-btn i {
+            font-size: 1.7rem;
+            margin-bottom: 3px;
+        }
+        
+        .social-label {
+            font-size: 0.85rem;
+            color: #fff;
+            margin-top: 2px;
+            text-align: center;
+            word-break: break-all;
+            opacity: 0.85;
+            font-family: 'Montserrat', 'Inter', sans-serif;
+        }
+        
+        .social-btn:hover i {
+            color: #fff;
         }
         
         .icon {
@@ -350,24 +372,26 @@
 
             <!-- Sección de enlaces sociales -->
             <div class="footer-section social-links">
-                <a href="https://www.instagram.com/ikune/" target="_blank" class="icon">
+                <a href="https://www.instagram.com/ikune/" target="_blank" class="icon social-btn">
                     <i class="fa-brands fa-instagram"></i>
                 </a>
-                <a href="https://www.linkedin.com/in/oscar-navarro-vegas/" target="_blank" class="icon">
+                <a href="https://www.linkedin.com/in/oscar-navarro-vegas/" target="_blank" class="icon social-btn">
                     <i class="fa-brands fa-linkedin-in"></i>
                 </a>
-                <a href="https://twitter.com/iKuneSocom" target="_blank" class="icon">
+                <a href="https://twitter.com/iKuneSocom" target="_blank" class="icon social-btn">
                     <i class="fa-brands fa-x-twitter"></i>
                 </a>
-                <a href="https://github.com/iKuneSocom" target="_blank" class="icon">
+                <a href="https://github.com/iKuneSocom" target="_blank" class="icon social-btn">
                     <i class="fa-brands fa-github"></i>
                 </a>
             </div>
 
             <!-- Sección de derechos de autor -->
             <div class="footer-section copyright">
-                <p>© 2025 Óscar Navarro. Todos los derechos reservados.</p>
-                <a href="https://www.buymeacoffee.com/ikunedev" target="_blank" class="donate-link">Apóyame con un café</a>
+                <a href="https://www.buymeacoffee.com/ikunedev" target="_blank">
+                    <img src="https://img.buymeacoffee.com/button-api/?text=Buy%20me%20a%20coffee&emoji=☕&slug=ikunedev&button_colour=5F7FFF&font_colour=ffffff&font_family=Bree&outline_colour=000000&coffee_colour=FFDD00" alt="Buy Me A Coffee" style="height: 40px; border-radius: 8px; margin-top: 8px;">
+                </a>
+                <p>© 2025 Óscar Navarro.</p>
             </div>
         </div>
     </footer>

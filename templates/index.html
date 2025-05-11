@@ -9,6 +9,7 @@
     <meta name="description" content="Corrige y valida matrículas de contenedores TEU al instante. Herramienta gratuita para profesionales de logística, transporte y aduanas. Fácil, rápida y precisa.">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='favicon_pmap.png') }}">
     <!-- SEO y Social -->
     <meta property="og:title" content="Corrector de Matrículas de Contenedores TEU" />
     <meta property="og:description" content="Herramienta gratuita para validar y corregir matrículas de contenedores. Ideal para logística y transporte." />
@@ -253,6 +254,11 @@
             gap: 12px;
             font-size: 1rem;
             box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+            animation: fadeInUp 0.5s;
+        }
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px);}
+            to { opacity: 1; transform: translateY(0);}
         }
         .hist-mat {
             color: #00ffaa;
@@ -278,6 +284,23 @@
             font-family: 'Montserrat', 'Inter', sans-serif;
             margin-left: auto;
         }
+
+        @media (max-width: 600px) {
+            footer {
+                position: fixed;
+                bottom: 0;
+                left: 0;
+                width: 100vw;
+                z-index: 10;
+            }
+            .main-container, .footer-container {
+                max-width: 98vw !important;
+                padding: 10px;
+            }
+            h1, h2#historyTitle {
+                font-size: 1.2rem;
+            }
+        }
     </style>
 </head>
 
@@ -293,10 +316,10 @@
         <label for="correctedNumber">Matrícula corregida:</label>
         <input type="text" id="correctedNumber" name="correctedNumber" readonly />
 
-        <button id="copyButton" disabled>Copiar</button>
+        <button id="copyButton" disabled title="Copia la matrícula corregida al portapapeles">Copiar</button>
     </div>
     <div class="main-container" id="historyContainer">
-        <h2>Últimas correcciones</h2>
+        <h2 id="historyTitle">Últimas correcciones</h2>
         <ul id="historyList"></ul>
     </div>
     <footer>

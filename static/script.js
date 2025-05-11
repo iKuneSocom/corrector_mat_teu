@@ -51,6 +51,13 @@ document.addEventListener('DOMContentLoaded', () => {
       updateHistoryList(data.last_corrections, data.ip_cliente);
     })
     .catch(err => console.error('Error al guardar:', err));
+
+    copyButton.textContent = "¡Copiado!";
+    copyButton.style.background = "#00ffaa";
+    setTimeout(() => {
+        copyButton.textContent = "Copiar";
+        copyButton.style.background = "";
+    }, 1200);
   });
 
   function updateHistoryList(last_corrections, ip_cliente) {

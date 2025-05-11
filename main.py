@@ -84,10 +84,11 @@ def guardar():
 def api_stats():
     stats = load_stats()
     ip = request.headers.get('X-Forwarded-For', request.remote_addr).split(',')[0].strip()
+    # Siempre suma una visita, sea o no nueva IP
+    stats['visits'] += 1
     if ip not in stats['users']:
         stats['users'].add(ip)
-        stats['visits'] += 1
-        save_stats(stats)
+    save_stats(stats)
     return jsonify({
         'users': len(stats['users']),
         'visits': stats['visits'],

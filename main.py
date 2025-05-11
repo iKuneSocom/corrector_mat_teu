@@ -55,7 +55,10 @@ def guardar():
     data = request.json
     corregida = data.get('corregida')
     hora_local = data.get('hora_local')
-    ip = request.headers.get('X-Forwarded-For', request.remote_addr).split(',')[0].strip()
+    ip_header = request.headers.get('X-Forwarded-For')
+    print("X-Forwarded-For:", ip_header)
+    print("remote_addr:", request.remote_addr)
+    ip = ip_header.split(',')[0].strip() if ip_header else request.remote_addr
 
     if not corregida or not hora_local:
         return jsonify({'error': 'Datos incompletos'}), 400
@@ -67,6 +70,15 @@ def guardar():
         'hora_local': hora_local
     })
     last_corrections[:] = last_corrections[:9]
+
+    # Guarda también en la base de datos
+    db = get_db()
+    db.execute(
+        'INSERT INTO correcciones (matricula, ip, fecha) VALUES (?, ?, ?)',
+        (corregida, ip, hora_local)
+    )
+    db.commit()
+    db.close()
 
     # Actualiza estadísticas
     stats = load_stats()
@@ -84,7 +96,10 @@ def guardar():
 @app.route('/api/stats')
 def api_stats():
     stats = load_stats()
-    ip = request.headers.get('X-Forwarded-For', request.remote_addr).split(',')[0].strip()
+    ip_header = request.headers.get('X-Forwarded-For')
+    print("X-Forwarded-For:", ip_header)
+    print("remote_addr:", request.remote_addr)
+    ip = ip_header.split(',')[0].strip() if ip_header else request.remote_addr
     # Siempre suma una visita, sea o no nueva IP
     stats['visits'] += 1
     if ip not in stats['users']:

@@ -4,9 +4,12 @@ import re
 import os
 import json
 from models import init_db, get_db
+from stats.stats_db import stats_bp
 
 app = Flask(__name__)
 app.wsgi_app = ProxyFix(app.wsgi_app, x_for=1)
+
+app.register_blueprint(stats_bp)
 
 pattern = re.compile(r'^[A-Z]{4}\d{7}$')
 STATS_FILE = 'stats.json'
@@ -63,14 +66,6 @@ def guardar():
     if not corregida or not hora_local:
         return jsonify({'error': 'Datos incompletos'}), 400
 
-    global last_corrections
-    last_corrections.insert(0, {
-        'corregida': corregida,
-        'ip': ip,
-        'hora_local': hora_local
-    })
-    last_corrections[:] = last_corrections[:9]
-
     # Guarda también en la base de datos
     db = get_db()
     db.execute(
@@ -89,7 +84,6 @@ def guardar():
     save_stats(stats)
 
     return jsonify({
-        'last_corrections': last_corrections,
         'ip_cliente': ip
     })
 

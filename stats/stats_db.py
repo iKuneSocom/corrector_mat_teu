@@ -1,4 +1,4 @@
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, render_template, Blueprint
 import subprocess
 import sys
 import os
@@ -9,14 +9,20 @@ app = Flask(__name__)
 # Si usas get_db de otro archivo, importa aquí:
 from models import get_db
 
+stats_bp = Blueprint('stats', __name__, template_folder='../templates')
+
 bot_process = None
 
-@app.route('/stats/api/bot_status')
+@stats_bp.route('/stats/')
+def stats_home():
+    return render_template('stats_db.html')
+
+@stats_bp.route('/stats/api/bot_status')
 def bot_status():
     global bot_process
     return jsonify({'running': bot_process is not None and bot_process.poll() is None})
 
-@app.route('/stats/api/toggle_bot', methods=['POST'])
+@stats_bp.route('/stats/api/toggle_bot', methods=['POST'])
 def toggle_bot():
     global bot_process
     if bot_process is not None and bot_process.poll() is None:
@@ -30,7 +36,7 @@ def toggle_bot():
         )
         return jsonify({'running': True})
 
-@app.route('/stats/api/correcciones')
+@stats_bp.route('/stats/api/correcciones')
 def api_correcciones():
     ip = request.args.get('ip')
     letras = request.args.get('letras')
@@ -64,3 +70,8 @@ def api_correcciones():
         'data': [dict(c) for c in correcciones],
         'total': total
     })
+
+app.register_blueprint(stats_bp)
+
+if __name__ == '__main__':
+    app.run()

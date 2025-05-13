@@ -38,23 +38,6 @@ document.addEventListener('DOMContentLoaded', () => {
   copyButton.addEventListener('click', () => {
     correctedNumberInput.select();
     document.execCommand('copy');
-
-    const horaLocal = new Date().toLocaleString();
-
-    fetch('/guardar', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        corregida: correctedNumberInput.value,
-        hora_local: horaLocal
-      })
-    })
-    .then(res => res.json())
-    .then(data => {
-      updateHistoryList(data.last_corrections, data.ip_cliente);
-    })
-    .catch(err => console.error('Error al guardar:', err));
-
     copyButton.textContent = "¡Copiado!";
     copyButton.style.background = "#00ffaa";
     setTimeout(() => {
@@ -66,14 +49,21 @@ document.addEventListener('DOMContentLoaded', () => {
   function updateHistoryList(last_corrections, ip_cliente) {
     historyList.innerHTML = '';
     last_corrections.forEach(item => {
-      const li = document.createElement('li');
-      li.className = 'hist-item';
-      li.innerHTML = `
-        <span class="hist-mat">${item.corregida}</span>
-        <span class="hist-ip${item.ip === ip_cliente ? ' tu' : ''}">${item.ip}${item.ip === ip_cliente ? ' (tú)' : ''}</span>
-        <span class="hist-hora">${item.hora_local}</span>
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td>
+            ${item.matricula}
+            <button onclick="copiarMatricula('${item.matricula}')">Copiar</button>
+        </td>
+        <td>${item.ip}</td>
+        <td>${item.fecha}</td>
       `;
-      historyList.appendChild(li);
+      historyList.appendChild(tr);
     });
+  }
+
+  function copiarMatricula(matricula) {
+    navigator.clipboard.writeText(matricula);
+    // Puedes mostrar un aviso visual si quieres
   }
 });

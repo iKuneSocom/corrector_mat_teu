@@ -150,7 +150,12 @@
                     data.forEach(item => {
                         const tr = document.createElement('tr');
                         tr.innerHTML = `
-                            <td>${item.matricula}</td>
+                            <td>
+                                ${item.matricula}
+                                <button onclick="copiarMatricula('${item.matricula}')" title="Copiar matrícula" style="margin-left:8px;cursor:pointer;">
+                                    <i class="fa-solid fa-copy"></i>
+                                </button>
+                            </td>
                             <td>${item.ip}</td>
                             <td>${item.fecha}</td>
                         `;
@@ -200,6 +205,11 @@
             await actualizarEstadoBot();
             toggleBotBtn.disabled = false;
         });
+
+        function copiarMatricula(matricula) {
+            navigator.clipboard.writeText(matricula);
+            alert('¡Matrícula copiada al portapapeles!');
+        }
 
         document.addEventListener('DOMContentLoaded', () => {
             cargarCorrecciones();

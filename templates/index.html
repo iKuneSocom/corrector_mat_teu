@@ -280,52 +280,7 @@
             box-shadow: 0 2px 8px rgba(0,0,0,0.07);
             animation: fadeInUp 0.5s;
         }
-        @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(20px);}
-            to { opacity: 1; transform: translateY(0);}
-        }
-        .hist-mat {
-            color: #00ffaa;
-            font-weight: bold;
-            letter-spacing: 1px;
-        }
-        .hist-ip {
-            color: #ffb300;
-            font-family: 'Consolas', 'Menlo', monospace;
-            font-size: 0.95em;
-            background: #222c;
-            padding: 2px 8px;
-            border-radius: 6px;
-        }
-        .hist-ip.tu {
-            background: #00ffaa;
-            color: #0b1f3a;
-            font-weight: bold;
-        }
-        .hist-hora {
-            color: #7ecfff;
-            font-size: 0.95em;
-            font-family: 'Montserrat', 'Inter', sans-serif;
-            margin-left: auto;
-        }
-
-        .hist-ip,
-        .hist-hora {
-            font-size: 0.8em;
-        }
-
-        /* Centrado y color igual que h1 para el título del historial */
-        #historyTitle {
-            text-align: center;
-            color: #00d4ff;      /* Igual que h1 */
-            font-size: 1.4rem;   /* Igual que h1 */
-            margin-bottom: 18px;
-            margin-top: 0;
-            font-family: inherit;
-            font-weight: bold;
-            letter-spacing: 1px;
-        }
-
+        
         @media (max-width: 600px) {
             .main-container, .footer-container {
                 max-width: 98vw !important;
@@ -379,10 +334,6 @@
 
         <button id="copyButton" disabled title="Copia la matrícula corregida al portapapeles">Copiar</button>
     </div>
-    <div class="main-container" id="historyContainer">
-        <h2 id="historyTitle">Últimas correcciones</h2>
-        <ul id="historyList"></ul>
-    </div>
     <div id="help-modal" style="display:none; position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(0,0,0,0.45); z-index:999; align-items:center; justify-content:center;">
       <div style="background:#fff; color:#222; border-radius:12px; padding:24px 18px; max-width:340px; margin:auto; box-shadow:0 8px 32px #0008; text-align:center; position:relative;">
         <button onclick="document.getElementById('help-modal').style.display='none'" style="position:absolute;top:8px;right:12px;background:none;border:none;font-size:1.3em;cursor:pointer;">&times;</button>
@@ -395,14 +346,6 @@
     </div>
     <footer>
         <div class="footer-container">
-            <!-- Sección de estadísticas -->
-            <div class="footer-section stats">
-                <p>Usuarios únicos: <span id="userCount">Cargando...</span></p>
-                <p>Correcciones realizadas: <span id="correctionsCount">Cargando...</span></p>
-                <p>Visitas: <span id="visitCounter">Cargando...</span></p>
-            </div>
-
-            <!-- Sección de enlaces sociales -->
             <div class="footer-section social-links">
                 <a href="https://www.instagram.com/ikune/" target="_blank" class="icon social-btn">
                     <i class="fa-brands fa-instagram"></i>
@@ -419,31 +362,14 @@
                 <a href="https://www.buymeacoffee.com/ikunedev" target="_blank" class="icon social-btn" title="Buy Me A Coffee">
                     <i class="fa-solid fa-mug-hot" style="color:#FFD600;"></i>
                 </a>
-            </div>
-
-            <!-- Sección de derechos de autor -->
-            <div class="footer-section copyright">
-                <a href="https://www.buymeacoffee.com/ikunedev" target="_blank">
-                    <img src="https://img.buymeacoffee.com/button-api/?text=Buy%20me%20a%20coffee&emoji=☕&slug=ikunedev&button_colour=5F7FFF&font_colour=ffffff&font_family=Bree&outline_colour=000000&coffee_colour=FFDD00" alt="Buy Me A Coffee" style="height: 40px; border-radius: 8px; margin-top: 8px;">
-                </a>
                 <p>© 2025 Óscar Navarro.</p>
             </div>
         </div>
     </footer>
     <script>
-        // Estadísticas del footer
-        async function loadStats() {
-            try {
-                const res = await fetch('/api/stats');
-                const data = await res.json();
-                document.getElementById('userCount').textContent = data.users;
-                document.getElementById('correctionsCount').textContent = data.corrections;
-                document.getElementById('visitCounter').textContent = data.visits;
-            } catch (e) {
-                console.error("No se pudo cargar la API de estadísticas");
-            }
-        }
-        document.addEventListener('DOMContentLoaded', loadStats);
+        document.getElementById('help-icon').onclick = function() {
+            document.getElementById('help-modal').style.display = 'flex';
+        };
     </script>
     <script>
         // Ajustar ancho del formulario según el logo
@@ -461,35 +387,6 @@
                 window.addEventListener('resize', ajustarAnchoFormulario);
             }
         });
-    </script>
-    <script>
-        // Cargar historial de correcciones
-        async function loadHistory() {
-            try {
-                const res = await fetch('/api/historial');
-                const data = await res.json();
-                const list = document.getElementById('historyList');
-                list.innerHTML = '';
-                data.forEach(item => {
-                    const li = document.createElement('li');
-                    li.className = 'hist-item';
-                    li.innerHTML = `
-                        <span class="hist-mat">${item.matricula}</span>
-                        <span class="hist-ip">IP: ${item.ip}</span>
-                        <span class="hist-hora">${item.fecha}</span>                        
-                    `;
-                    list.appendChild(li);
-                });
-            } catch (e) {
-                // Puedes mostrar un mensaje de error si lo deseas
-            }
-        }
-        document.addEventListener('DOMContentLoaded', loadHistory);
-    </script>
-    <script>
-        document.getElementById('help-icon').onclick = function() {
-            document.getElementById('help-modal').style.display = 'flex';
-        };
     </script>
     <script src="{{ url_for('static', filename='script.js') }}"></script>
 </body>

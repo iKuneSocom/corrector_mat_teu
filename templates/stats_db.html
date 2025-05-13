@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Estadísticas de Matrículas - PMAP</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
+    <style>
+        body {
+            background: #0b1f3a;
+            color: #fff;
+            font-family: 'Inter', 'Montserrat', sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        .main-container {
+            background: rgba(11, 31, 58, 0.98);
+            margin: 24px auto;
+            padding: 24px 12px;
+            border-radius: 12px;
+            max-width: 900px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.4);
+        }
+        h1 {
+            text-align: center;
+            color: #00d4ff;
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+        }
+        .filters {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            justify-content: center;
+            margin-bottom: 18px;
+        }
+        .filters input, .filters select {
+            padding: 6px 10px;
+            border-radius: 6px;
+            border: 1px solid #005ea3;
+            font-size: 1em;
+        }
+        .boton-bot {
+            background: #ffdd00;
+            color: #222;
+            border: none;
+            border-radius: 8px;
+            padding: 8px 18px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-bottom: 18px;
+            font-size: 1em;
+        }
+        .boton-bot.on {
+            background: #00ffaa;
+            color: #0b1f3a;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 18px;
+        }
+        th, td {
+            padding: 7px 5px;
+            text-align: left;
+            font-size: 0.95em;
+        }
+        th {
+            background: #003e6b;
+            color: #fff;
+        }
+        tr:nth-child(even) {
+            background: #0e2a4d;
+        }
+        tr:nth-child(odd) {
+            background: #153a5c;
+        }
+        .footer-container {
+            margin-top: 30px;
+            text-align: center;
+            color: #aaa;
+            font-size: 0.9em;
+        }
+        @media (max-width: 600px) {
+            .main-container {
+                padding: 10px 2px;
+                max-width: 99vw;
+            }
+            table, th, td {
+                font-size: 0.85em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="main-container">
+        <h1>Estadísticas de Matrículas</h1>
+        <div class="filters">
+            <input type="text" id="filterIp" placeholder="Filtrar por IP">
+            <input type="text" id="filterLetras" maxlength="4" placeholder="Filtrar por letras (XXXX)">
+            <select id="perPage">
+                <option value="10">10 por página</option>
+                <option value="25">25 por página</option>
+                <option value="50">50 por página</option>
+                <option value="100">100 por página</option>
+            </select>
+            <button class="boton-bot" id="toggleBot"><i class="fa-solid fa-robot"></i> Bot ON/OFF</button>
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th>Matrícula</th>
+                    <th>IP</th>
+                    <th>Fecha y hora</th>
+                </tr>
+            </thead>
+            <tbody id="tablaCorrecciones">
+                <!-- Aquí se insertarán las filas por JS -->
+            </tbody>
+        </table>
+        <div id="paginacion" style="text-align:center; margin-bottom:10px;"></div>
+    </div>
+    <div class="footer-container">
+        &copy; 2025 Óscar Navarro - PMAP
+    </div>
+    <script>
+        let paginaActual = 1;
+
+        async function cargarCorrecciones() {
+            const ip = document.getElementById('filterIp').value.trim();
+            const letras = document.getElementById('filterLetras').value.trim();
+            const perPage = document.getElementById('perPage').value;
+            let url = `/stats/api/correcciones?page=${paginaActual}&per_page=${perPage}`;
+            if (ip) url += `&ip=${encodeURIComponent(ip)}`;
+            if (letras) url += `&letras=${encodeURIComponent(letras)}`;
+
+            const tbody = document.getElementById('tablaCorrecciones');
+            tbody.innerHTML = '<tr><td colspan="3">Cargando...</td></tr>';
+
+            try {
+                const res = await fetch(url);
+                const result = await res.json();
+                const data = result.data;
+                const total = result.total;
+                tbody.innerHTML = '';
+                if (data.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="3">Sin resultados</td></tr>';
+                } else {
+                    data.forEach(item => {
+                        const tr = document.createElement('tr');
+                        tr.innerHTML = `
+                            <td>${item.matricula}</td>
+                            <td>${item.ip}</td>
+                            <td>${item.fecha}</td>
+                        `;
+                        tbody.appendChild(tr);
+                    });
+                }
+                // Paginación mejorada
+                const totalPages = Math.ceil(total / perPage);
+                document.getElementById('paginacion').innerHTML = `
+                    <button onclick="cambiarPagina(-1)" ${paginaActual === 1 ? 'disabled' : ''}>Anterior</button>
+                    <span style="margin:0 10px;">Página ${paginaActual} de ${totalPages}</span>
+                    <button onclick="cambiarPagina(1)" ${paginaActual >= totalPages ? 'disabled' : ''}>Siguiente</button>
+                `;
+            } catch (e) {
+                tbody.innerHTML = '<tr><td colspan="3">Error al cargar datos</td></tr>';
+            }
+        }
+
+        function cambiarPagina(delta) {
+            paginaActual += delta;
+            if (paginaActual < 1) paginaActual = 1;
+            cargarCorrecciones();
+        }
+
+        document.getElementById('filterIp').addEventListener('input', () => { paginaActual = 1; cargarCorrecciones(); });
+        document.getElementById('filterLetras').addEventListener('input', () => { paginaActual = 1; cargarCorrecciones(); });
+        document.getElementById('perPage').addEventListener('change', () => { paginaActual = 1; cargarCorrecciones(); });
+
+        // --- Botón ON/OFF ---
+        const toggleBotBtn = document.getElementById('toggleBot');
+
+        async function actualizarEstadoBot() {
+            const res = await fetch('/stats/api/bot_status');
+            const data = await res.json();
+            if (data.running) {
+                toggleBotBtn.classList.add('on');
+                toggleBotBtn.innerHTML = '<i class="fa-solid fa-robot"></i> Bot ON';
+            } else {
+                toggleBotBtn.classList.remove('on');
+                toggleBotBtn.innerHTML = '<i class="fa-solid fa-robot"></i> Bot OFF';
+            }
+        }
+
+        toggleBotBtn.addEventListener('click', async () => {
+            toggleBotBtn.disabled = true;
+            await fetch('/stats/api/toggle_bot', {method: 'POST'});
+            await actualizarEstadoBot();
+            toggleBotBtn.disabled = false;
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            cargarCorrecciones();
+            actualizarEstadoBot();
+        });
+    </script>
+</body>
+</html>

@@ -140,5 +140,4 @@ def google_verification():
     return app.send_static_file('google935869f451a677c7.html')
 
 if __name__ == '__main__':
-    init_db()
     app.run()

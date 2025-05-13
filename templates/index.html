@@ -334,6 +334,18 @@
             h1, h2#historyTitle {
                 font-size: 1.2rem;
             }
+            body, .main-container, .footer-container {
+                font-size: 0.95em !important;
+            }
+            h1, h2 {
+                font-size: 1.1em !important;
+            }
+            .social-btn i {
+                font-size: 1.2em !important;
+            }
+            .main-container {
+                padding: 10px 2vw !important;
+            }
         }
     </style>
 
@@ -353,7 +365,12 @@
         <img src="{{ url_for('static', filename='fondo_corr_teu2.png') }}" alt="Logo con diseño moderno y profesional de PMAP Corrector Matrículas TEU" />
     </div>
     <div class="main-container">
-        <h1>Container Validator PRO</h1>
+        <h1>
+            Container Validator PRO
+            <span id="help-icon" style="cursor:pointer; margin-left:8px;" title="¿Cómo funciona?">
+                <i class="fa-solid fa-circle-question" style="color:#FFD600; font-size:1.1em;"></i>
+            </span>
+        </h1>
         <label for="containerNumber">Introduce la matrícula del contenedor:</label>
         <input type="text" id="containerNumber" name="containerNumber" autocomplete="off" />
 
@@ -365,6 +382,16 @@
     <div class="main-container" id="historyContainer">
         <h2 id="historyTitle">Últimas correcciones</h2>
         <ul id="historyList"></ul>
+    </div>
+    <div id="help-modal" style="display:none; position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(0,0,0,0.45); z-index:999; align-items:center; justify-content:center;">
+      <div style="background:#fff; color:#222; border-radius:12px; padding:24px 18px; max-width:340px; margin:auto; box-shadow:0 8px 32px #0008; text-align:center; position:relative;">
+        <button onclick="document.getElementById('help-modal').style.display='none'" style="position:absolute;top:8px;right:12px;background:none;border:none;font-size:1.3em;cursor:pointer;">&times;</button>
+        <h2 style="color:#0077cc; font-size:1.1em;">Ejemplo de uso</h2>
+        <div style="margin:18px 0; font-size:1.1em;">
+          <b>Xxx-X_123_456,7</b> &rarr; <b>XXXX1234567</b>
+        </div>
+        <div style="font-size:0.95em; color:#444;">Introduce la matrícula en cualquier formato y la app la corregirá automáticamente.</div>
+      </div>
     </div>
     <footer>
         <div class="footer-container">
@@ -388,6 +415,9 @@
                 </a>
                 <a href="https://github.com/iKuneSocom" target="_blank" class="icon social-btn">
                     <i class="fa-brands fa-github"></i>
+                </a>
+                <a href="https://www.buymeacoffee.com/ikunedev" target="_blank" class="icon social-btn" title="Buy Me A Coffee">
+                    <i class="fa-solid fa-mug-hot" style="color:#FFD600;"></i>
                 </a>
             </div>
 
@@ -455,6 +485,11 @@
             }
         }
         document.addEventListener('DOMContentLoaded', loadHistory);
+    </script>
+    <script>
+        document.getElementById('help-icon').onclick = function() {
+            document.getElementById('help-modal').style.display = 'flex';
+        };
     </script>
     <script src="{{ url_for('static', filename='script.js') }}"></script>
 </body>

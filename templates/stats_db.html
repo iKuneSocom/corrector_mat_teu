@@ -142,14 +142,12 @@
                 <tr>
                     <th>Matrícula</th>
                     <th>IP</th>
-                    <th>Fecha y hora</th>
+                    <th>Fecha</th>
                 </tr>
             </thead>
-            <tbody id="tablaCorrecciones">
-                <!-- Aquí se insertarán las filas por JS -->
-            </tbody>
+            <tbody id="tablaCorrecciones"></tbody>
         </table>
-        <div id="paginacion" style="text-align:center; margin-bottom:10px;"></div>
+        <div id="paginacion"></div>
     </div>
     <div class="footer-container">
         &copy; 2025 Óscar Navarro - PMAP
@@ -161,7 +159,44 @@
             const perPage = document.getElementById('perPage').value;
             const order = document.getElementById('orderBy').value;
             let url = `/stats/api/correcciones?page=${paginaActual}&per_page=${perPage}&order=${order}`;
-            // fetch y renderizado...
+            const tbody = document.getElementById('tablaCorrecciones');
+            tbody.innerHTML = '<tr><td colspan="3">Cargando...</td></tr>';
+
+            try {
+                const res = await fetch(url);
+                const result = await res.json();
+                const data = result.data;
+                const total = result.total;
+                tbody.innerHTML = '';
+                if (data.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="3">Sin resultados</td></tr>';
+                } else {
+                    data.forEach(item => {
+                        const tr = document.createElement('tr');
+                        tr.innerHTML = `
+                            <td>${item.matricula}</td>
+                            <td>${item.ip}</td>
+                            <td>${item.fecha}</td>
+                        `;
+                        tbody.appendChild(tr);
+                    });
+                }
+                // Paginación
+                const totalPages = Math.ceil(total / perPage);
+                document.getElementById('paginacion').innerHTML = `
+                    <button onclick="cambiarPagina(-1)" ${paginaActual === 1 ? 'disabled' : ''}>Anterior</button>
+                    <span style="margin:0 10px;">Página ${paginaActual} de ${totalPages}</span>
+                    <button onclick="cambiarPagina(1)" ${paginaActual >= totalPages ? 'disabled' : ''}>Siguiente</button>
+                `;
+            } catch (e) {
+                tbody.innerHTML = '<tr><td colspan="3">Error al cargar datos</td></tr>';
+            }
+        }
+
+        function cambiarPagina(delta) {
+            paginaActual += delta;
+            if (paginaActual < 1) paginaActual = 1;
+            cargarCorrecciones();
         }
 
         document.getElementById('perPage').addEventListener('change', () => { paginaActual = 1; cargarCorrecciones(); });

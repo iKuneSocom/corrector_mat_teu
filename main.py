@@ -55,37 +55,18 @@ def validar():
 
 @app.route('/guardar', methods=['POST'])
 def guardar():
-    data = request.json
-    corregida = data.get('corregida')
-    hora_local = data.get('hora_local')
-    ip_header = request.headers.get('X-Forwarded-For')
-    print("X-Forwarded-For:", ip_header)
-    print("remote_addr:", request.remote_addr)
-    ip = ip_header.split(',')[0].strip() if ip_header else request.remote_addr
-
-    if not corregida or not hora_local:
-        return jsonify({'error': 'Datos incompletos'}), 400
-
-    # Guarda también en la base de datos
+    data = request.get_json()
+    matricula = data.get('corregida')
+    fecha = data.get('hora_local')
+    ip = request.remote_addr
     db = get_db()
     db.execute(
-        'INSERT INTO correcciones (matricula, ip, fecha) VALUES (?, ?, ?)',
-        (corregida, ip, hora_local)
+        "INSERT INTO correcciones (matricula, ip, fecha) VALUES (?, ?, ?)",
+        (matricula, ip, fecha)
     )
     db.commit()
     db.close()
-
-    # Actualiza estadísticas
-    stats = load_stats()
-    if ip not in stats['users']:
-        stats['users'].add(ip)
-        stats['visits'] += 1
-    stats['corrections'] += 1
-    save_stats(stats)
-
-    return jsonify({
-        'ip_cliente': ip
-    })
+    return jsonify({"status": "ok"})
 
 @app.route('/api/stats')
 def api_stats():

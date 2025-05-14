@@ -1,4 +1,4 @@
-from flask import Flask, jsonify, request, render_template, Blueprint
+from flask import Flask, jsonify, request, render_template, Blueprint, send_file
 import subprocess
 import sys
 import os
@@ -53,38 +53,21 @@ def toggle_bot():
 
 @stats_bp.route('/stats/api/correcciones')
 def api_correcciones():
-    ip = request.args.get('ip')
-    letras = request.args.get('letras')
     page = int(request.args.get('page', 1))
-    per_page = int(request.args.get('per_page', 10))
+    per_page = int(request.args.get('per_page', 25))
     order = request.args.get('order', 'desc').lower()
     if order not in ('asc', 'desc'):
         order = 'desc'
 
     db = get_db()
-    # Conteo total para paginación
-    count_query = 'SELECT COUNT(*) FROM correcciones WHERE 1=1'
-    params = []
-    if ip:
-        count_query += ' AND ip = ?'
-        params.append(ip)
-    if letras:
-        count_query += ' AND matricula LIKE ?'
-        params.append(f'{letras.upper()}%')
-    total = db.execute(count_query, params).fetchone()[0]
-
-    # Consulta paginada y ordenada
-    query = 'SELECT matricula, ip, fecha FROM correcciones WHERE 1=1'
-    params = []
-    if ip:
-        query += ' AND ip = ?'
-        params.append(ip)
-    if letras:
-        query += ' AND matricula LIKE ?'
-        params.append(f'{letras.upper()}%')
-    query += f' ORDER BY fecha {order.upper()} LIMIT ? OFFSET ?'
-    params.extend([per_page, (page-1)*per_page])
-    correcciones = db.execute(query, params).fetchall()
+    total = db.execute('SELECT COUNT(*) FROM correcciones').fetchone()[0]
+    query = f'''
+        SELECT matricula, ip, fecha
+        FROM correcciones
+        ORDER BY fecha {order.upper()}
+        LIMIT ? OFFSET ?
+    '''
+    correcciones = db.execute(query, (per_page, (page-1)*per_page)).fetchall()
     db.close()
     return jsonify({
         'data': [dict(c) for c in correcciones],
@@ -127,6 +110,11 @@ def todas_correcciones():
     datos = db.execute('SELECT * FROM correcciones ORDER BY fecha DESC').fetchall()
     db.close()
     return jsonify([dict(row) for row in datos])
+
+@stats_bp.route('/stats/api/descargar_db')
+@auth.login_required
+def descargar_db():
+    return send_file('stats.db', as_attachment=True)
 
 app.register_blueprint(stats_bp)
 

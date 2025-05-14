@@ -129,7 +129,7 @@
             <input type="text" id="filterIp" placeholder="Filtrar por IP">
             <input type="text" id="filterLetras" maxlength="4" placeholder="Filtrar por letras (XXXX)">
             <select id="perPage">
-                <option value="10">10 por página</option>
+                <option value="10" selected>10 por página</option>
                 <option value="25">25 por página</option>
                 <option value="50">50 por página</option>
                 <option value="100">100 por página</option>
@@ -210,8 +210,6 @@
             cargarCorrecciones();
         }
 
-        document.getElementById('filterIp').addEventListener('input', () => { paginaActual = 1; cargarCorrecciones(); });
-        document.getElementById('filterLetras').addEventListener('input', () => { paginaActual = 1; cargarCorrecciones(); });
         document.getElementById('perPage').addEventListener('change', () => { paginaActual = 1; cargarCorrecciones(); });
         document.getElementById('buscarBtn').addEventListener('click', () => { paginaActual = 1; cargarCorrecciones(); });
 
@@ -260,4 +258,4 @@
         });
     </script>
 </body>
-</html>
+</html

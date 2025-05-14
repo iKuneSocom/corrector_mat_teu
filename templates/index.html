@@ -280,6 +280,11 @@
             box-shadow: 0 2px 8px rgba(0,0,0,0.07);
             animation: fadeInUp 0.5s;
         }
+
+        #langSelector {
+            font-size: 0.65em;
+            /* ...resto de estilos... */
+        }
         
         @media (max-width: 600px) {
             .main-container, .footer-container {
@@ -319,20 +324,18 @@
     <div class="logo-wrapper">
         <img src="{{ url_for('static', filename='fondo_corr_teu2.png') }}" alt="Logo con diseño moderno y profesional de PMAP Corrector Matrículas TEU" />
     </div>
-    <div style="text-align:right; margin: 10px 20px 0 0;">
-      <select id="langSelector">
-        <option value="es">Español</option>
-        <option value="ca">Català</option>
-        <option value="en">English</option>
-        <option value="fr">Français</option>
-        <option value="zh">中文</option>
-        <option value="de">Deutsch</option>
-        <option value="pt">Português</option>
-      </select>
-    </div>
     <div class="main-container">
-        <h1>
-            Container Validator PRO
+        <h1 style="display: flex; align-items: center; justify-content: center; gap: 12px;">
+            <span id="main-title" style="flex-shrink:0;"></span>
+            <select id="langSelector" style="background:#0b1f3a; color:#00d4ff; border:1.5px solid #005ea3; border-radius:7px; font-family:'Inter','Montserrat',sans-serif; font-size:1em; padding:4px 10px; margin:0 6px; outline:none; box-shadow:0 2px 8px #005ea344;">
+                <option value="es">Español</option>
+                <option value="ca">Català</option>
+                <option value="en">English</option>
+                <option value="fr">Français</option>
+                <option value="zh">中文</option>
+                <option value="de">Deutsch</option>
+                <option value="pt">Português</option>
+            </select>
             <span id="help-icon" style="cursor:pointer; margin-left:8px;" title="¿Cómo funciona?">
                 <i class="fa-solid fa-circle-question" style="color:#FFD600; font-size:1.1em;"></i>
             </span>
@@ -468,8 +471,9 @@
 
         function setLanguage(lang) {
           const t = translations[lang] || translations['es'];
-          document.querySelector('h1').childNodes[0].nodeValue = t.title + " ";
-          document.querySelector('label[for="containerNumber"]').textContent = t.inputLabel;          document.querySelector('label[for="correctedNumber"]').textContent = t.correctedLabel;
+          document.getElementById('main-title').textContent = t.title;
+          document.querySelector('label[for="containerNumber"]').textContent = t.inputLabel;
+          document.querySelector('label[for="correctedNumber"]').textContent = t.correctedLabel;
           document.getElementById('copyButton').textContent = t.copy;
           document.getElementById('help-icon').title = t.help;
           document.querySelector('#help-modal h2').textContent = t.helpExample;

@@ -319,6 +319,17 @@
     <div class="logo-wrapper">
         <img src="{{ url_for('static', filename='fondo_corr_teu2.png') }}" alt="Logo con diseño moderno y profesional de PMAP Corrector Matrículas TEU" />
     </div>
+    <div style="text-align:right; margin: 10px 20px 0 0;">
+      <select id="langSelector">
+        <option value="es">Español</option>
+        <option value="ca">Català</option>
+        <option value="en">English</option>
+        <option value="fr">Français</option>
+        <option value="zh">中文</option>
+        <option value="de">Deutsch</option>
+        <option value="pt">Português</option>
+      </select>
+    </div>
     <div class="main-container">
         <h1>
             Container Validator PRO
@@ -386,6 +397,96 @@
                 ajustarAnchoFormulario();
                 window.addEventListener('resize', ajustarAnchoFormulario);
             }
+        });
+    </script>
+    <script>
+        const translations = {
+          es: {
+            title: "Container Validator PRO",
+            inputLabel: "Introduce la matrícula del contenedor:",
+            correctedLabel: "Matrícula corregida:",
+            copy: "Copiar",
+            help: "¿Cómo funciona?",
+            helpExample: "Ejemplo de uso",
+            helpText: "Introduce la matrícula en cualquier formato y la app la corregirá automáticamente."
+          },
+          ca: {
+            title: "Validació de Contenidors PRO",
+            inputLabel: "Introdueix la matrícula del contenidor:",
+            correctedLabel: "Matrícula corregida:",
+            copy: "Copia",
+            help: "Com funciona?",
+            helpExample: "Exemple d'ús",
+            helpText: "Introdueix la matrícula en qualsevol format i l'app la corregirà automàticament."
+          },
+          en: {
+            title: "Container Validator PRO",
+            inputLabel: "Enter the container number:",
+            correctedLabel: "Corrected number:",
+            copy: "Copy",
+            help: "How does it work?",
+            helpExample: "Usage example",
+            helpText: "Enter the container number in any format and the app will correct it automatically."
+          },
+          fr: {
+            title: "Validateur de Conteneur PRO",
+            inputLabel: "Entrez le numéro du conteneur :",
+            correctedLabel: "Numéro corrigé :",
+            copy: "Copier",
+            help: "Comment ça marche ?",
+            helpExample: "Exemple d'utilisation",
+            helpText: "Entrez le numéro du conteneur dans n'importe quel format et l'application le corrigera automatiquement."
+          },
+          zh: {
+            title: "集装箱校验工具 PRO",
+            inputLabel: "输入集装箱号：",
+            correctedLabel: "校正后的号码：",
+            copy: "复制",
+            help: "如何使用？",
+            helpExample: "使用示例",
+            helpText: "以任意格式输入集装箱号，应用会自动校正。"
+          },
+          de: {
+            title: "Container Validator PRO",
+            inputLabel: "Geben Sie die Containernummer ein:",
+            correctedLabel: "Korrigierte Nummer:",
+            copy: "Kopieren",
+            help: "Wie funktioniert das?",
+            helpExample: "Beispiel",
+            helpText: "Geben Sie die Containernummer in beliebigem Format ein, die App korrigiert sie automatisch."
+          },
+          pt: {
+            title: "Validador de Contêiner PRO",
+            inputLabel: "Digite o número do contêiner:",
+            correctedLabel: "Número corrigido:",
+            copy: "Copiar",
+            help: "Como funciona?",
+            helpExample: "Exemplo de uso",
+            helpText: "Digite o número do contêiner em qualquer formato e o app corrigirá automaticamente."
+          }
+        };
+
+        function setLanguage(lang) {
+          const t = translations[lang] || translations['es'];
+          document.querySelector('h1').childNodes[0].nodeValue = t.title + " ";
+          document.querySelector('label[for="containerNumber"]').textContent = t.inputLabel;          document.querySelector('label[for="correctedNumber"]').textContent = t.correctedLabel;
+          document.getElementById('copyButton').textContent = t.copy;
+          document.getElementById('help-icon').title = t.help;
+          document.querySelector('#help-modal h2').textContent = t.helpExample;
+          document.querySelector('#help-modal div[style*="margin:18px"]').innerHTML = '<b>Xxx-X_123_456,7</b> &rarr; <b>XXXX1234567</b>';
+          document.querySelector('#help-modal div[style*="color:#444"]').textContent = t.helpText;
+        }
+
+        document.getElementById('langSelector').addEventListener('change', function() {
+          setLanguage(this.value);
+          localStorage.setItem('lang', this.value);
+        });
+
+        // Al cargar la página, usa el idioma guardado o el del navegador
+        document.addEventListener('DOMContentLoaded', () => {
+          const savedLang = localStorage.getItem('lang') || navigator.language.slice(0,2);
+          document.getElementById('langSelector').value = translations[savedLang] ? savedLang : 'en';
+          setLanguage(document.getElementById('langSelector').value);
         });
     </script>
     <script src="{{ url_for('static', filename='script.js') }}"></script>

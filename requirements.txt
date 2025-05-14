@@ -1,5 +1,8 @@
+Flask
 flask>=2.0.1
 Werkzeug
 gunicorn>=20.1
 python-dotenv
 requests
+flask-cors
+flask-httpauth

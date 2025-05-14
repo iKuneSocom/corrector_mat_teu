@@ -41,19 +41,21 @@ def api_correcciones():
     ip = request.args.get('ip')
     letras = request.args.get('letras')
     page = int(request.args.get('page', 1))
-    per_page = int(request.args.get('per_page', 20))
+    per_page = int(request.args.get('per_page', 10))
 
     db = get_db()
-    query = 'SELECT COUNT(*) FROM correcciones WHERE 1=1'
+    # Conteo total para paginación
+    count_query = 'SELECT COUNT(*) FROM correcciones WHERE 1=1'
     params = []
     if ip:
-        query += ' AND ip = ?'
+        count_query += ' AND ip = ?'
         params.append(ip)
     if letras:
-        query += ' AND matricula LIKE ?'
+        count_query += ' AND matricula LIKE ?'
         params.append(f'{letras.upper()}%')
-    total = db.execute(query, params).fetchone()[0]
+    total = db.execute(count_query, params).fetchone()[0]
 
+    # Consulta paginada
     query = 'SELECT matricula, ip, fecha FROM correcciones WHERE 1=1'
     params = []
     if ip:

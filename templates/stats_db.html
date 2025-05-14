@@ -56,6 +56,16 @@
             background: #00ffaa;
             color: #0b1f3a;
         }
+        .boton-buscar {
+            background: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            padding: 8px 18px;
+            font-weight: bold;
+            cursor: pointer;
+            font-size: 1em;
+        }
         table {
             width: 100%;
             border-collapse: collapse;
@@ -95,7 +105,7 @@
 </head>
 <body>
     <div class="main-container">
-        <h1>Estadísticas de Matrículas</h1>
+        <h1>Estadísticas Corrector PMAP.app</h1>
         <div class="filters">
             <input type="text" id="filterIp" placeholder="Filtrar por IP">
             <input type="text" id="filterLetras" maxlength="4" placeholder="Filtrar por letras (XXXX)">
@@ -105,6 +115,7 @@
                 <option value="50">50 por página</option>
                 <option value="100">100 por página</option>
             </select>
+            <button id="buscarBtn" class="boton-buscar"><i class="fa-solid fa-magnifying-glass"></i> Buscar</button>
             <button class="boton-bot" id="toggleBot"><i class="fa-solid fa-robot"></i> Bot ON/OFF</button>
         </div>
         <table>
@@ -183,6 +194,7 @@
         document.getElementById('filterIp').addEventListener('input', () => { paginaActual = 1; cargarCorrecciones(); });
         document.getElementById('filterLetras').addEventListener('input', () => { paginaActual = 1; cargarCorrecciones(); });
         document.getElementById('perPage').addEventListener('change', () => { paginaActual = 1; cargarCorrecciones(); });
+        document.getElementById('buscarBtn').addEventListener('click', () => { paginaActual = 1; cargarCorrecciones(); });
 
         // --- Botón ON/OFF ---
         const toggleBotBtn = document.getElementById('toggleBot');

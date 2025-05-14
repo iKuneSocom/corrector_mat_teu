@@ -282,8 +282,16 @@
         }
 
         #langSelector {
-            font-size: 0.65em;
-            /* ...resto de estilos... */
+            font-size: 0.80em;
+            background: #0b1f3a;
+            color: #00d4ff;
+            border: 1.5px solid #005ea3;
+            border-radius: 7px;
+            font-family: 'Inter','Montserrat',sans-serif;
+            padding: 4px 10px;
+            margin: 0 6px;
+            outline: none;
+            box-shadow: 0 2px 8px #005ea344;
         }
         
         @media (max-width: 600px) {
@@ -327,7 +335,7 @@
     <div class="main-container">
         <h1 style="display: flex; align-items: center; justify-content: center; gap: 12px;">
             <span id="main-title" style="flex-shrink:0;"></span>
-            <select id="langSelector" style="background:#0b1f3a; color:#00d4ff; border:1.5px solid #005ea3; border-radius:7px; font-family:'Inter','Montserrat',sans-serif; font-size:1em; padding:4px 10px; margin:0 6px; outline:none; box-shadow:0 2px 8px #005ea344;">
+            <select id="langSelector">
                 <option value="es">Español</option>
                 <option value="ca">Català</option>
                 <option value="en">English</option>

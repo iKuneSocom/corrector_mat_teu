@@ -106,6 +106,25 @@
 <body>
     <div class="main-container">
         <h1>Estadísticas Corrector PMAP.app</h1>
+        <div style="display:flex; align-items:center; gap:18px; margin-bottom:18px; flex-wrap:wrap;">
+            <button class="boton-bot" id="toggleBot"><i class="fa-solid fa-robot"></i> Bot ON/OFF</button>
+            <span style="font-size:1.1em; color:#FFD600;">
+                <i class="fa-solid fa-database"></i>
+                Matrículas corregidas: <b id="correccionesCount">...</b>
+            </span>
+            <span style="font-size:1.1em; color:#FFD600;">
+                <i class="fa-solid fa-users"></i>
+                Visitas únicas: <b id="visitasUnicas">...</b>
+            </span>
+            <span style="font-size:1.1em; color:#FFD600;">
+                <i class="fa-solid fa-user-group"></i>
+                Visitas totales: <b id="visitasTotales">...</b>
+            </span>
+            <label style="margin-left:12px; font-size:0.98em;">
+                <input type="checkbox" id="depuradoChk" style="vertical-align:middle; margin-right:4px;">
+                Modo depurado (sin bot)
+            </label>
+        </div>
         <div class="filters">
             <input type="text" id="filterIp" placeholder="Filtrar por IP">
             <input type="text" id="filterLetras" maxlength="4" placeholder="Filtrar por letras (XXXX)">
@@ -218,6 +237,17 @@
             toggleBotBtn.disabled = false;
         });
 
+        async function cargarContadores() {
+            const depurado = document.getElementById('depuradoChk').checked ? '1' : '0';
+            const res = await fetch(`/stats/api/contadores?depurado=${depurado}`);
+            const data = await res.json();
+            document.getElementById('correccionesCount').textContent = data.correcciones_totales;
+            document.getElementById('visitasUnicas').textContent = data.visitas_unicas;
+            document.getElementById('visitasTotales').textContent = data.visitas_totales;
+        }
+
+        document.getElementById('depuradoChk').addEventListener('change', cargarContadores);
+
         function copiarMatricula(matricula) {
             navigator.clipboard.writeText(matricula);
             alert('¡Matrícula copiada al portapapeles!');
@@ -226,6 +256,7 @@
         document.addEventListener('DOMContentLoaded', () => {
             cargarCorrecciones();
             actualizarEstadoBot();
+            cargarContadores();
         });
     </script>
 </body>

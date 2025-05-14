@@ -73,6 +73,35 @@ def api_correcciones():
         'total': total
     })
 
+@stats_bp.route('/stats/api/contador_correcciones')
+def contador_correcciones():
+    db = get_db()
+    total = db.execute('SELECT COUNT(*) FROM correcciones').fetchone()[0]
+    db.close()
+    return jsonify({'total': total})
+
+@stats_bp.route('/stats/api/contadores')
+def contadores():
+    depurado = request.args.get('depurado', '0') == '1'
+    db = get_db()
+    # Visitas únicas (por IP) y totales
+    if depurado:
+        # Excluir IP del bot, por ejemplo '127.0.0.2' o la que uses para el bot
+        bot_ip = '127.0.0.2'  # Cambia esto por la IP real del bot si es otra
+        total_visitas = db.execute("SELECT COUNT(*) FROM visitas WHERE ip != ?", (bot_ip,)).fetchone()[0]
+        visitas_unicas = db.execute("SELECT COUNT(DISTINCT ip) FROM visitas WHERE ip != ?", (bot_ip,)).fetchone()[0]
+        total_correcciones = db.execute("SELECT COUNT(*) FROM correcciones WHERE ip != ?", (bot_ip,)).fetchone()[0]
+    else:
+        total_visitas = db.execute("SELECT COUNT(*) FROM visitas").fetchone()[0]
+        visitas_unicas = db.execute("SELECT COUNT(DISTINCT ip) FROM visitas").fetchone()[0]
+        total_correcciones = db.execute("SELECT COUNT(*) FROM correcciones").fetchone()[0]
+    db.close()
+    return jsonify({
+        'visitas_unicas': visitas_unicas,
+        'visitas_totales': total_visitas,
+        'correcciones_totales': total_correcciones
+    })
+
 app.register_blueprint(stats_bp)
 
 if __name__ == '__main__':

@@ -126,15 +126,15 @@
             </label>
         </div>
         <div class="filters">
-            <input type="text" id="filterIp" placeholder="Filtrar por IP">
-            <input type="text" id="filterLetras" maxlength="4" placeholder="Filtrar por letras (XXXX)">
             <select id="perPage">
-                <option value="10" selected>10 por página</option>
-                <option value="25">25 por página</option>
-                <option value="50">50 por página</option>
+                <option value="25" selected>25 por página</option>
                 <option value="100">100 por página</option>
             </select>
-            <button id="buscarBtn" class="boton-buscar"><i class="fa-solid fa-magnifying-glass"></i> Buscar</button>
+            <select id="orderBy">
+                <option value="desc" selected>Más nuevo primero</option>
+                <option value="asc">Más antiguo primero</option>
+            </select>
+            <button id="buscarBtn" class="boton-buscar">Actualizar</button>
         </div>
         <table>
             <thead>
@@ -157,12 +157,10 @@
         let paginaActual = 1;
 
         async function cargarCorrecciones() {
-            const ip = document.getElementById('filterIp').value.trim();
-            const letras = document.getElementById('filterLetras').value.trim();
             const perPage = document.getElementById('perPage').value;
-            let url = `/stats/api/correcciones?page=${paginaActual}&per_page=${perPage}`;
-            if (ip) url += `&ip=${encodeURIComponent(ip)}`;
-            if (letras) url += `&letras=${encodeURIComponent(letras)}`;
+            const order = document.getElementById('orderBy').value;
+            let url = `/stats/api/correcciones?page=${paginaActual}&per_page=${perPage}&order=${order}`;
+            // Si tienes filtros, añádelos aquí
 
             const tbody = document.getElementById('tablaCorrecciones');
             tbody.innerHTML = '<tr><td colspan="3">Cargando...</td></tr>';
@@ -179,19 +177,14 @@
                     data.forEach(item => {
                         const tr = document.createElement('tr');
                         tr.innerHTML = `
-                            <td>
-                                ${item.matricula}
-                                <button onclick="copiarMatricula('${item.matricula}')" title="Copiar matrícula" style="margin-left:8px;cursor:pointer;">
-                                    <i class="fa-solid fa-copy"></i>
-                                </button>
-                            </td>
+                            <td>${item.matricula}</td>
                             <td>${item.ip}</td>
                             <td>${item.fecha}</td>
                         `;
                         tbody.appendChild(tr);
                     });
                 }
-                // Paginación mejorada
+                // Paginación
                 const totalPages = Math.ceil(total / perPage);
                 document.getElementById('paginacion').innerHTML = `
                     <button onclick="cambiarPagina(-1)" ${paginaActual === 1 ? 'disabled' : ''}>Anterior</button>
@@ -210,6 +203,7 @@
         }
 
         document.getElementById('perPage').addEventListener('change', () => { paginaActual = 1; cargarCorrecciones(); });
+        document.getElementById('orderBy').addEventListener('change', () => { paginaActual = 1; cargarCorrecciones(); });
         document.getElementById('buscarBtn').addEventListener('click', () => { paginaActual = 1; cargarCorrecciones(); });
 
         // --- Botón ON/OFF ---

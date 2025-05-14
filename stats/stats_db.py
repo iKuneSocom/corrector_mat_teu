@@ -2,12 +2,27 @@ from flask import Flask, jsonify, request, render_template, Blueprint
 import subprocess
 import sys
 import os
+from flask_cors import CORS
+from flask_httpauth import HTTPBasicAuth
 
 # Si este archivo es independiente:
 app = Flask(__name__)
+CORS(app, origins=["https://www.pmap.app", "http://localhost:5000"])
 
 # Si usas get_db de otro archivo, importa aquí:
 from models import get_db
+
+auth = HTTPBasicAuth()
+try:
+    from security import USERS
+except ImportError:
+    USERS = {
+        os.environ.get("STATS_USER", "admin"): os.environ.get("STATS_PASS", "contraseña_predeterminada")
+    }
+
+@auth.verify_password
+def verify_password(username, password):
+    return USERS.get(username) == password
 
 stats_bp = Blueprint('stats', __name__, template_folder='../templates')
 
@@ -42,6 +57,9 @@ def api_correcciones():
     letras = request.args.get('letras')
     page = int(request.args.get('page', 1))
     per_page = int(request.args.get('per_page', 10))
+    order = request.args.get('order', 'desc').lower()
+    if order not in ('asc', 'desc'):
+        order = 'desc'
 
     db = get_db()
     # Conteo total para paginación
@@ -55,7 +73,7 @@ def api_correcciones():
         params.append(f'{letras.upper()}%')
     total = db.execute(count_query, params).fetchone()[0]
 
-    # Consulta paginada
+    # Consulta paginada y ordenada
     query = 'SELECT matricula, ip, fecha FROM correcciones WHERE 1=1'
     params = []
     if ip:
@@ -64,7 +82,7 @@ def api_correcciones():
     if letras:
         query += ' AND matricula LIKE ?'
         params.append(f'{letras.upper()}%')
-    query += ' ORDER BY fecha DESC LIMIT ? OFFSET ?'
+    query += f' ORDER BY fecha {order.upper()} LIMIT ? OFFSET ?'
     params.extend([per_page, (page-1)*per_page])
     correcciones = db.execute(query, params).fetchall()
     db.close()
@@ -101,6 +119,14 @@ def contadores():
         'visitas_totales': total_visitas,
         'correcciones_totales': total_correcciones
     })
+
+@stats_bp.route('/stats/api/todas_correcciones')
+@auth.login_required
+def todas_correcciones():
+    db = get_db()
+    datos = db.execute('SELECT * FROM correcciones ORDER BY fecha DESC').fetchall()
+    db.close()
+    return jsonify([dict(row) for row in datos])
 
 app.register_blueprint(stats_bp)
 

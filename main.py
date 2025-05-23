@@ -116,5 +116,16 @@ def sitemap():
 def google_verification():
     return app.send_static_file('google935869f451a677c7.html')
 
+# Puedes usar una tabla simple para el contador, o un archivo, o una variable global (menos recomendable en producción)
+from models import get_db
+
+@app.route('/contar_corregida', methods=['POST'])
+def contar_corregida():
+    db = get_db()
+    db.execute('INSERT INTO corregidas (fecha) VALUES (CURRENT_TIMESTAMP)')
+    db.commit()
+    db.close()
+    return '', 204  # Sin contenido
+
 if __name__ == '__main__':
     app.run()

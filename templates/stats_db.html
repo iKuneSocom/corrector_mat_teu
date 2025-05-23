@@ -112,7 +112,11 @@
             </button>
             <span style="font-size:0.8em; color:#FFD600;">
                 <i class="fa-solid fa-database"></i>
-                Matrículas corregidas: <b id="correccionesCount">...</b>
+                Matrículas corregidas: <b id="corregidasCount">0</b>
+            </span>
+            <span style="font-size:0.8em; color:#FFD600;">
+                <i class="fa-solid fa-copy"></i>
+                Matrículas copiadas: <b id="copiadasCount">0</b>
             </span>
             <span style="font-size:0.8em; color:#FFD600;">
                 <i class="fa-solid fa-users"></i>
@@ -216,7 +220,7 @@
             const depurado = document.getElementById('depuradoChk').checked ? '1' : '0';
             const res = await fetch(`/stats/api/contadores?depurado=${depurado}`);
             const data = await res.json();
-            document.getElementById('correccionesCount').textContent = data.correcciones_totales;
+            document.getElementById('corregidasCount').textContent = data.correcciones_totales;
             document.getElementById('visitasUnicas').textContent = data.visitas_unicas;
             document.getElementById('visitasTotales').textContent = data.visitas_totales;
         }

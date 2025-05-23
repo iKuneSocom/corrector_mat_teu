@@ -7,6 +7,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
   copyButton.disabled = true;
 
+  let contadorCorregidas = 0;
+
   const validarFormato = (mat) => /^[A-Z]{4}\d{7}$/.test(mat);
 
   containerNumberInput.addEventListener('input', () => {
@@ -26,15 +28,10 @@ document.addEventListener('DOMContentLoaded', () => {
         correctedNumberInput.classList.remove('invalid');
         copyButton.disabled = false;
 
-        // Aquí haces la llamada a /guardar
-        fetch('/guardar', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                corregida: data.corregida,
-                hora_local: new Date().toISOString().slice(0, 19).replace('T', ' ')
-            })
-        });
+        // Incrementa el contador de corregidas (frontend)
+        contadorCorregidas++;
+        // Llama al backend para contar también allí
+        fetch('/contar_corregida', { method: 'POST' });
       } else {
         correctedNumberInput.classList.remove('valid');
         correctedNumberInput.classList.add('invalid');
@@ -57,7 +54,7 @@ document.addEventListener('DOMContentLoaded', () => {
             })
         });
     }
-});
+  });
 
   function updateHistoryList(last_corrections, ip_cliente) {
     historyList.innerHTML = '';
@@ -78,5 +75,12 @@ document.addEventListener('DOMContentLoaded', () => {
   function copiarMatricula(matricula) {
     navigator.clipboard.writeText(matricula);
     // Puedes mostrar un aviso visual si quieres
+  }
+
+  async function cargarContadores() {
+    const res = await fetch('/api/contadores');
+    const data = await res.json();
+    document.getElementById('corregidasCount').textContent = data.corregidas;
+    document.getElementById('copiadasCount').textContent = data.copiadas;
   }
 });

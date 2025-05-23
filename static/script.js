@@ -2,6 +2,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const containerNumberInput = document.getElementById('containerNumber');
   const correctedNumberInput = document.getElementById('correctedNumber');
   const copyButton = document.getElementById('copyButton');
+  const copiedMsg = document.getElementById('copiedMsg');
   const historyList = document.getElementById('historyList');
   const visitCounter = document.getElementById('visitCounter');
 
@@ -45,6 +46,15 @@ document.addEventListener('DOMContentLoaded', () => {
   copyButton.addEventListener('click', function() {
     const correctedValue = correctedNumberInput.value;
     if (correctedValue) {
+        // Copiar al portapapeles
+        navigator.clipboard.writeText(correctedValue).then(() => {
+            // Mostrar mensaje
+            const msg = document.getElementById('copiedMsg');
+            msg.style.display = 'inline';
+            setTimeout(() => { msg.style.display = 'none'; }, 1500);
+        });
+
+        // Guardar en la base de datos
         fetch('/guardar', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },

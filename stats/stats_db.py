@@ -89,7 +89,7 @@ def contadores():
     visitas_totales = db.execute('SELECT COUNT(ip) FROM correcciones').fetchone()[0]
     db.close()
     return jsonify({
-        'correcciones_totales': total_correcciones,
+        'copiadas': total_correcciones,
         'visitas_unicas': visitas_unicas,
         'visitas_totales': visitas_totales
     })

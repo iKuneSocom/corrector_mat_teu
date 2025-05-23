@@ -216,11 +216,11 @@
         }
 
         async function cargarContadores() {
-            // Si tienes el modo depurado, añade el parámetro si está activado
             const depurado = document.getElementById('depuradoChk').checked ? '1' : '0';
             const res = await fetch(`/stats/api/contadores?depurado=${depurado}`);
             const data = await res.json();
-            document.getElementById('corregidasCount').textContent = data.correcciones_totales;
+            // Si tienes también el contador de corregidas, añádelo aquí
+            document.getElementById('copiadasCount').textContent = data.copiadas;
             document.getElementById('visitasUnicas').textContent = data.visitas_unicas;
             document.getElementById('visitasTotales').textContent = data.visitas_totales;
         }

@@ -1,7 +1,9 @@
+import os
 import sqlite3
 
 def get_db():
-    conn = sqlite3.connect('stats.db')
+    db_path = os.environ.get("DB_PATH", "/data/stats.db")
+    conn = sqlite3.connect(db_path)
     conn.row_factory = sqlite3.Row
     return conn
 

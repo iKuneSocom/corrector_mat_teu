@@ -114,7 +114,8 @@ def todas_correcciones():
 @stats_bp.route('/stats/api/descargar_db')
 @auth.login_required
 def descargar_db():
-    return send_file('stats.db', as_attachment=True)
+    db_path = os.environ.get("DB_PATH", "/data/stats.db")
+    return send_file(db_path, as_attachment=True)
 
 app.register_blueprint(stats_bp)
 

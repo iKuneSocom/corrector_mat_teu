@@ -60,10 +60,12 @@ def guardar():
     fecha = data.get('hora_local')
     ip = request.remote_addr
     db = get_db()
+    print("Datos recibidos:", data)
     db.execute(
         "INSERT INTO correcciones (matricula, ip, fecha) VALUES (?, ?, ?)",
         (matricula, ip, fecha)
     )
+    print("Insertando:", matricula, ip, fecha)
     db.commit()
     db.close()
     return jsonify({"status": "ok"})

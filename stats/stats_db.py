@@ -83,24 +83,15 @@ def contador_correcciones():
 
 @stats_bp.route('/stats/api/contadores')
 def contadores():
-    depurado = request.args.get('depurado', '0') == '1'
     db = get_db()
-    # Visitas únicas (por IP) y totales
-    if depurado:
-        # Excluir IP del bot, por ejemplo '127.0.0.2' o la que uses para el bot
-        bot_ip = '127.0.0.2'  # Cambia esto por la IP real del bot si es otra
-        total_visitas = db.execute("SELECT COUNT(*) FROM visitas WHERE ip != ?", (bot_ip,)).fetchone()[0]
-        visitas_unicas = db.execute("SELECT COUNT(DISTINCT ip) FROM visitas WHERE ip != ?", (bot_ip,)).fetchone()[0]
-        total_correcciones = db.execute("SELECT COUNT(*) FROM correcciones WHERE ip != ?", (bot_ip,)).fetchone()[0]
-    else:
-        total_visitas = db.execute("SELECT COUNT(*) FROM visitas").fetchone()[0]
-        visitas_unicas = db.execute("SELECT COUNT(DISTINCT ip) FROM visitas").fetchone()[0]
-        total_correcciones = db.execute("SELECT COUNT(*) FROM correcciones").fetchone()[0]
+    total_correcciones = db.execute('SELECT COUNT(*) FROM correcciones').fetchone()[0]
+    visitas_unicas = db.execute('SELECT COUNT(DISTINCT ip) FROM correcciones').fetchone()[0]
+    visitas_totales = db.execute('SELECT COUNT(ip) FROM correcciones').fetchone()[0]
     db.close()
     return jsonify({
+        'correcciones_totales': total_correcciones,
         'visitas_unicas': visitas_unicas,
-        'visitas_totales': total_visitas,
-        'correcciones_totales': total_correcciones
+        'visitas_totales': visitas_totales
     })
 
 @stats_bp.route('/stats/api/todas_correcciones')

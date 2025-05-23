@@ -25,6 +25,16 @@ document.addEventListener('DOMContentLoaded', () => {
         correctedNumberInput.classList.add('valid');
         correctedNumberInput.classList.remove('invalid');
         copyButton.disabled = false;
+
+        // Aquí haces la llamada a /guardar
+        fetch('/guardar', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                corregida: data.corregida,
+                hora_local: new Date().toISOString().slice(0, 19).replace('T', ' ')
+            })
+        });
       } else {
         correctedNumberInput.classList.remove('valid');
         correctedNumberInput.classList.add('invalid');
@@ -35,16 +45,19 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  copyButton.addEventListener('click', () => {
-    correctedNumberInput.select();
-    document.execCommand('copy');
-    copyButton.textContent = "¡Copiado!";
-    copyButton.style.background = "#00ffaa";
-    setTimeout(() => {
-        copyButton.textContent = "Copiar";
-        copyButton.style.background = "";
-    }, 1200);
-  });
+  copyButton.addEventListener('click', function() {
+    const correctedValue = correctedNumberInput.value;
+    if (correctedValue) {
+        fetch('/guardar', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                corregida: correctedValue,
+                hora_local: new Date().toISOString().slice(0, 19).replace('T', ' ')
+            })
+        });
+    }
+});
 
   function updateHistoryList(last_corrections, ip_cliente) {
     historyList.innerHTML = '';
